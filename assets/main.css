@@ -203,3 +203,12 @@
   .bg-gradient{
     background: radial-gradient(circle at 12.3% 19.3%, rgb(85, 88, 218) 0%, rgb(95, 209, 249) 100.2%);
   }
+
+  
+  .option-type.disabled{
+    background-color: #f2f2f2;
+    border: 1px #ddd solid !important;
+  }
+  button:disabled{
+    opacity: 0.5;
+  }

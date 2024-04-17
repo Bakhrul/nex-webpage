@@ -1,24 +1,5 @@
 <template>
     <div>
-        <div id="overlay" @click="offModalAutoDebet()">
-        </div>
-        <div id="modal-term-dialog" @click="offModalAutoDebet()">
-            <div class="modal" id="modal-term" @click.stop="">
-                <div class="header" id="header">
-                    <div class="text-lg text-center p-2 font-semibold">Syarat Dan ketentuan</div>
-                </div>
-                <div class="body p-2">
-
-                    <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley
-                        of type and scrambled it to make a type specimen book.</div>
-                    <button type="button" @click="offModalAutoDebet()"
-                        class="w-full rounded-lg text-white p-2 text-md font-bold pointer mt-3 bg-primary">Setuju</button>
-                    <button type="button" @click="offModalAutoDebet()"
-                        class="pointer w-full rounded-lg text-black bg-gray-300 mt-3 p-2 text-md font-bold">Tutup</button>
-                </div>
-            </div>
-        </div>
         <div class="flex justify-center">
             <div class="main-wrapper relative">
                 <div class="flex w-full border-b border-gray-200 px-3 py-2 flex justify-center">
@@ -43,42 +24,33 @@
 
                             </path>
                         </svg>
-                    </div>                 
+                    </div>
                 </div>
-                <div class="w-full bg-gray-300 " style="height:150px;"></div>
+                <div class="banner">
+                    <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/business-banner-template-design-f4b281ca556e3d500e78fc6260273284_screen.jpg?ts=1561497794"
+                        class="w-full">
+                    <img src="https://marketplace.canva.com/EAE9QjX6rhA/1/0/1600w/canva-blue-pink-gradient-fashion-banner-cVzLo3B1IHE.jpg"
+                        class="w-full">
+                    <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/church-facebook-banner-design-template-7471ce255b02886530d575e1b4029e63_screen.jpg?ts=1584732765"
+                        class="w-full">
+                </div>
                 <div class="p-3 border-b border-gray-200">
                     <div class="text-lg font-bold">Paket Langganan</div>
                     <div class="text-gray-600">Pilih dibawah ini untuk reguler atau Auto Debet</div>
-                    <!-- <div class="flex items-center">
+                    <div class="flex items-center">
                         <button type="button" @click="type = 'reguler'" :class="type == 'reguler' ? 'active' : ''"
                             class="option-type mt-3 mr-3">Reguler</button>
-                        <button type="button" @click="type = 'auto'" :class="type == 'auto' ? 'active' : ''"
-                            class="option-type mt-3">Auto Debet</button>
-                    </div> -->
+                        <a href="https://nexautodebet-webpage.vercel.app/"><button type="button"
+                                :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button></a>
+                    </div>
                     <template v-if="type == 'reguler'">
                         <div class="mt-3">
                             <div class="font-semibold mb-2">No SMC ID</div>
-                            <input type="text" class="w-full p-3 border-gray-300 rounded-xl border"
+                            <input type="text" class="w-full p-3 border-gray-300 rounded-xl border" v-model="smc"
                                 placeholder="Masukan No SMC ID" />
                         </div>
                     </template>
-                    <template v-if="type == 'auto'">
-                        <div class="mt-3">
-                            <div class="font-semibold mb-2">No. Handphone</div>
-                            <input type="text" class="w-full p-3 border-gray-300 rounded-xl border"
-                                placeholder="Masukan No Handphone" />
-                            <div class="text-xs text-gray-600">Mohon input nomor HP yang dapat dihubungi supaya dapat
-                                kami
-                                bantu jika ada kendala</div>
-                        </div>
-                        <div class="mt-3">
-                            <div class="font-semibold mb-2">No SMC ID</div>
-                            <input type="text" class="w-full p-3 border-gray-300 rounded-xl border"
-                                placeholder="Masukan No SMC ID" />
-                        </div>
-
-                    </template>
-                    <button type="button"
+                    <button type="button" :disabled="!smc" @click="clickProcess = true;choose1 = ''"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button>
                 </div>
                 <div class="p-3 border-b border-gray-200">
@@ -99,9 +71,15 @@
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <button type="button" class="option-type mt-1 mr-3 active">30 Hari</button>
-                                <button type="button" class="option-type mt-1 mr-3">90 Hari</button>
-                                <button type="button" class="option-type mt-1">180 Hari</button>
+                                <button type="button" class="option-type mt-1 mr-3"
+                                    :class="`${!clickProcess ? 'disabled' : ''} ${choose1 == 1 ? 'active' : ''}`"
+                                    @click="changeChoose(1)">30 Hari</button>
+                                <button type="button" class="option-type mt-1 mr-3"
+                                    :class="`${!clickProcess ? 'disabled' : ''} ${choose1 == 2 ? 'active' : ''}`"
+                                    @click="changeChoose(2)">90 Hari</button>
+                                <button type="button" class="option-type mt-1"
+                                    :class="`${!clickProcess ? 'disabled' : ''} ${choose1 == 3 ? 'active' : ''}`"
+                                    @click="changeChoose(3)">180 Hari</button>
                             </div>
                         </div>
                     </div>
@@ -121,21 +99,17 @@
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <button type="button" class="option-type mt-1 mr-3 active">30 Hari</button>
-                                <button type="button" class="option-type mt-1 mr-3">90 Hari</button>
-                                <button type="button" class="option-type mt-1">180 Hari</button>
+                                <button type="button" class="option-type mt-1 mr-3"
+                                    :class="`${!clickProcess ? 'disabled' : ''} ${choose1 == 4 ? 'active' : ''}`"
+                                    @click="changeChoose(4)">30 Hari</button>
+                                <button type="button" class="option-type mt-1 mr-3"
+                                    :class="`${!clickProcess ? 'disabled' : ''} ${choose1 == 5 ? 'active' : ''}`"
+                                    @click="changeChoose(5)">90 Hari</button>
+                                <button type="button" class="option-type mt-1"
+                                    :class="`${!clickProcess ? 'disabled' : ''} ${choose1 == 6 ? 'active' : ''}`"
+                                    @click="changeChoose(6)">180 Hari</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-center text-blue-600 font-bold mt-10 mb-5" style="text-decoration: underline">Lihat
-                        Semua</div>
-                </div>
-                <div class="p-3 border-b border-gray-200" v-if="type == 'auto'">
-                    <div class="flex items-center">
-                        <div class="checkbox-auto pointer mr-3 rounded-lg" @click="clickedAutoDebet">
-                            <i class="bi bi-check"></i>
-                        </div>
-                        <div class="text-black font-medium text-sm">Saya Setuju Auto Debet</div>
                     </div>
                 </div>
                 <div class="p-3 border-b border-gray-200" v-if="type == 'reguler'">
@@ -180,7 +154,7 @@
                         <div class="font-bold">Total Pembelian</div>
                         <div class="text-right font-bold">Rp 45.000</div>
                     </div>
-                    <nuxt-link to="/payment"><button type="button"
+                    <nuxt-link to="/payment"><button type="button" :disabled="!choose1"
                             class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Pembayaran</button>
                     </nuxt-link>
                 </div>
@@ -191,6 +165,11 @@
 </template>
 <script setup>
     const type = ref('reguler');
+    const phone = ref('');
+    const smc = ref('')
+    const choose1 = ref('');
+    const clickProcess = ref(false)    
+
     useSeoMeta({
         title: 'My Amazing Site',
         ogTitle: 'My Amazing Site',
@@ -199,16 +178,30 @@
         twitterCard: 'summary_large_image',
     })
 
-    function clickedAutoDebet() {
-        document.getElementById("overlay").style.display = "block";
-        setTimeout(() => {
-            document.getElementById('modal-term-dialog').style.display = "block";
-        }, 300);
+    onBeforeRouteLeave((to, from, next) => {
+        if ($('.banner').hasClass('slick-initialized')) {
+            $('.banner').slick('destroy');
+        }
+
+        next()
+    })
+    onMounted(() => {
+
+        $('.banner').slick({
+            infinite: true,
+            speed: 500,
+            auto: true,
+            dots: false,
+            arrows: false,
+            slidesToShow: 1,
+            adaptiveHeight: true
+        });
+    })
+
+    function changeChoose(type) {
+        if (clickProcess.value) {
+            choose1.value = type;
+        }
 
     }
-
-    function offModalAutoDebet() {
-        document.getElementById("overlay").style.display = "none";
-        document.getElementById('modal-term-dialog').style.display = "none";
-    } 
 </script>
