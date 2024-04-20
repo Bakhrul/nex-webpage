@@ -24,7 +24,7 @@
                                 placeholder="Masukan kode kupon">
 
                         </div>
-                        <button type="button" @click="choosePromo(code, code)"
+                        <button type="button" @click="choosePromo(code, code)" :disabled="!code"
                             class="pointer bg-primary text-white py-3 px-5 ml-3 rounded-md font-bold">Gunakan</button>
                     </div>
                 </div>
