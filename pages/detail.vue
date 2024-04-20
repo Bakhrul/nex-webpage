@@ -6,14 +6,76 @@
                     <img src="~/assets/logo.jpg" style="width:150px" />
                 </div>
                 <div class="p-3">
-                    <div class="bg-gradient w-full rounded-lg mt-3 " style="height:200px;"></div>
-                    <div class="text-2xl text-center font-bold pt-5">Paket Basic</div>
-                    <div class="pt-5 font-bold text-lg pb-2">Yang akan didapatkan</div>
-                    <div class="text-gray-600">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+                    <div v-if="pageStatus == 'page-load'" class="flex justify-center mt-5">
+                        <div class="loader"></div>
+                    </div>
+                    <template v-else>
+                        <img :src="banner" class="w-100">
+                        <div class="text-2xl text-center font-bold pt-5 mb-5" v-html="title"></div>
+                        <div v-html="content"></div>
+                    </template>
                 </div>
             </div>
         </div>
     </div>
 </template>
-<script setup lang="ts">   
+<script setup lang="ts">
+    import axios from "axios";
+
+    import {
+        useToast
+    } from 'vue-toast-notification';
+    import 'vue-toast-notification/dist/theme-sugar.css';
+
+    const route = useRoute();
+
+    const config = useRuntimeConfig()
+
+    const $toast = useToast();
+
+    const pageStatus = ref('standby');
+
+    const banner = ref('');
+    const title = ref('');
+    const content = ref('');
+
+    onMounted(() => {
+
+        pageStatus.value = 'page-load';
+
+        let urlX = '';
+        if(route.query.type){
+            urlX = config.public.API_URL + 'paketdetailregular?id=' + route.query.id + '&type=' + route.query.type;
+        }else{
+            urlX = config.public.API_URL + 'paketdetailautodebet?id=' + route.query.id;
+        }
+        axios.get(urlX, {
+            headers: {
+                'NEX-APIKEY': 'apikey-1234567890'
+            }
+        }).then(response => {
+            if (response.data.success) {
+                pageStatus.value = 'standby';
+                banner.value = response.data.data.bannerurl;
+                title.value = response.data.data.paketname;
+                content.value = response.data.data.content;
+            } else {
+                $toast.open({
+                    message: response.data.message,
+                    type: 'error',
+                    position: 'top',
+                    duration: 2000
+                });
+            }
+        }).catch(error => {
+            $toast.open({
+                message: 'Terjadi kesalahan sistem',
+                type: 'error',
+                position: 'top',
+                duration: 2000
+
+            });
+        });
+
+    })
 </script>
