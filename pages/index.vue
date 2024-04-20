@@ -831,6 +831,14 @@
             sessionStorage.setItem('packet', choosePacket.value);
         }
 
+        if (voucher.value) {
+            sessionStorage.setItem('voucher', voucher.value);
+        }
+
+        if (disc.value) {
+            sessionStorage.setItem('disc', disc.value);
+        }
+        
         sessionStorage.setItem('type', type.value);
         router.push({
             path: '/input-promo',
