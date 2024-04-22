@@ -100,7 +100,7 @@
         ogDescription: 'Nex Web Page',
         twitterCard: 'summary_large_image',
     })
-    
+
     onMounted(() => {
         pageStatus.value = 'page-load';
 
@@ -216,8 +216,7 @@
 
             if (payment.value == 'DANA') {
                 urlX = 'paymentautodebet/danalink'
-            } else if (payment.value == 'OVO') {
-                data.hpno = ovoPhone.value;
+            } else if (payment.value == 'OVO') {                
                 urlX = 'paymentautodebet/ovolink'
             } else if (payment.value == 'SHOPPEE') {
                 urlX = 'paymentautodebet/shopeelink'
