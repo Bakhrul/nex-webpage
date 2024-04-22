@@ -121,6 +121,7 @@
         ogDescription: 'Nex Web Page',
         twitterCard: 'summary_large_image',
     })
+
     function processOtp() {
         pageStatus.value = 'otp-load';
         let data = {
@@ -130,6 +131,7 @@
             paketid: route.query.packet,
             cardno: cardno.value,
             brihpno: brihpno.value,
+            vouchercode: route.query.voucher,
             email: email.value
         }
         axios.post(config.public.API_URL + 'paymentautodebet/brilink', data, {
