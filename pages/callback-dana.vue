@@ -10,9 +10,12 @@
                         <div class="loader"></div>
                     </div>
                     <template v-else>
-                        <img :src="banner" class="w-100">
-                        <div class="text-2xl text-center font-bold pt-5 mb-5" v-html="title"></div>
-                        <div v-html="content"></div>
+                        <div class="flex justify-center"><i class="bi bi-check-circle" style="font-size:92px;color:green"></i></div>
+                        <div class="font-semibold text-xl mb-2 text-center">Link Akun DANA berhasil</div>
+                        <div class="text-gray-600 mb-2 text-center">Klik Lanjut untuk aktivasi paket berlangganan Anda
+                        </div>
+                        <button type="button" @click="processPayment()" :disabled="pageStatus == 'payment-load'"
+                            class="text-white mb-5 mt-10 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">{{ pageStatus == 'payment-load' ? 'Processing...' : 'Lanjut' }}</button>
                     </template>
                 </div>
             </div>
@@ -27,38 +30,41 @@
     } from 'vue-toast-notification';
     import 'vue-toast-notification/dist/theme-sugar.css';
 
-    const route = useRoute();
 
     const config = useRuntimeConfig()
+    const route = useRoute();
 
     const $toast = useToast();
 
     const pageStatus = ref('standby');
 
-    const banner = ref('');
-    const title = ref('');
-    const content = ref('');
 
     onMounted(() => {
 
-        pageStatus.value = 'page-load';
+        pageStatus.value = 'standby';
 
-        let urlX = '';
-        if(route.query.type){
-            urlX = config.public.API_URL + 'paketdetailregular?id=' + route.query.id + '&type=' + route.query.type;
-        }else{
-            urlX = config.public.API_URL + 'paketdetailautodebet?id=' + route.query.id;
+    }) 
+    
+    useSeoMeta({
+        title: 'Nex Web Page',
+        ogTitle: 'Nex Web Page',
+        description: 'Nex Web Page',
+        ogDescription: 'Nex Web Page',
+        twitterCard: 'summary_large_image',
+    })
+
+    function processPayment() {
+        pageStatus.value = 'payment-load';
+        let data = {
+            trxid: route.query.trxid,
         }
-        axios.get(urlX, {
+        axios.post(config.public.API_URL + 'paymentautodebet/danapayment', data, {
             headers: {
                 'NEX-APIKEY': 'apikey-1234567890'
             }
         }).then(response => {
             if (response.data.success) {
-                pageStatus.value = 'standby';
-                banner.value = response.data.data.bannerurl;
-                title.value = response.data.data.paketname;
-                content.value = response.data.data.content;
+                location.replace(response.data.data.paymenturl);
             } else {
                 $toast.open({
                     message: response.data.message,
@@ -76,14 +82,5 @@
 
             });
         });
-
-    })
-
-    useSeoMeta({
-        title: 'Nex Web Page',
-        ogTitle: 'Nex Web Page',
-        description: 'Nex Web Page',
-        ogDescription: 'Nex Web Page',
-        twitterCard: 'summary_large_image',
-    })
+    }  
 </script>

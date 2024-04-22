@@ -50,12 +50,12 @@
                 <div v-if="pageStatus == 'home-load'" class="flex justify-center mt-5">
                     <div class="loader"></div>
                 </div>
-                <template v-else>
+                <div class="w-full" v-show="pageStatus != 'home-load'">
                     <div class="banner">
                         <img @click="redirectPromo(context.id)" v-for="context in banner" :src="context.bannerurl"
-                            class="w-full">
+                            class="w-full">                          \                        
                     </div>
-                </template>
+                </div>
                 <div class="p-3 border-b border-gray-200">
                     <div class="text-lg font-bold">Paket Langganan</div>
                     <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
@@ -69,7 +69,8 @@
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
-                        <input type="number" @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = '';"
+                        <input type="number"
+                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = '';"
                             class="w-full p-3 border-gray-300 rounded-xl border" v-model="phone"
                             placeholder="Masukan No Handphone" />
                         <div class="text-xs text-gray-600 pt-1">Mohon input nomor HP yang dapat dihubungi supaya
@@ -79,7 +80,8 @@
                     </div>
                     <div class="mt-3">
                         <div class="font-semibold mb-2">No SMC ID</div>
-                        <input type="number" @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = '';"
+                        <input type="number"
+                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = '';"
                             class="w-full p-3 border-gray-300 rounded-xl border" v-model="smc"
                             placeholder="Masukan No SMC ID" />
                     </div>
@@ -216,9 +218,13 @@
                         <div class="flex items-center">
                             <img style="width:30px"
                                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEtUlEQVR4nO1ZzW8bRRRflQPwLyC4IA5IiEqlnrEbIgXPLGn4SChS01YEpSSQSqVpEgGSaS+JOAUOQA+V+GiR4NADHMild6hqiBsSihAqqqh6QS2lkMSe2bXX3uxDbzb+duIdxxvVpU960urt7uz7zfu9N292DOOe3MUi4/QdwcjbRieKYNFDgtE1waknOR02OkkEo3HBaE5yCqiC07w0yV7jThC7N/KIYPSaZPRUxox2w7Sxo/K+MGNPSk5Xis6XlWQkiz1VO56IkycEJzOSk9+sHvpw6ACESQ5UOiYYvSE4+URy0pfp3f244PRmvfOlSNzEZ/BZfEcweqPqvkkOhA5AcvLxRg5uXclHoQMQnKbCAiA4mQ/VeYjFHhSMOuEBoHn8RmgAMGnDow9Vmnlm99Ntdxx6eh7AgSUn58IGIDk5h9/Cb7bssGV2PWSxSL/gdFYyelFwkg3fcVqbDwUsrYKRT3EhzPLIo4EBSE5/326HZTNl9EpgAIKT94MObB95FdzkBfDSq+CtLoObSoJ9/PUQIkJnAwNIxyNdgZyfeAMg74CSQh6gUChd4726d/q6wXr52ZYA2JzsCQwA24PNVtSiuj//pPx1ly6B9WKPUrxWtsVU3fPOl5+Bl0lDbiahSR9yq7ZlaU4jRs42G9izbeVs9t3Jkg2vUfBe1Qwe3u9Hy1sD+9iIJn3IGUNXrHh0oNnARbGPDpcdPTpcsldFaz0y+W+/1qaPxSL92gAEi+5sGoHVFT8CJ6bKEUhM+BGwrJItNzvt2/69DdYA009gFt2pN/smiSDvmuZA8oLP918vg3WoH6yDL4B7edG3Lcz7s7fPBG9lWdly751sKYElo/8ETmJhEi4ZSQeqDEeGAJz1KlQpjgP2m6+pZwrn53xAqWRrzvNiFKiULPLc5s5zMqR2TxoD2+OjquJA1lYz7V78DuzRgz6dJscAPA8glwVraN+WAMjS6kxHN+L8JO5ht/qRkvbugbU/rvoB+fx0Oxc0TzKSCB2Ac+a0cn7t+jWQe7vCB9AqhRop0gVpg/RBGimqHRsBdz6p2g2km7u0oN1ybEqhVpJ4I8WEVR3F+Tnf+fGRxsmed1QhaFsS65bRRoqlUtX8lWVVQhUgTHLVciyANfi8KrlYelHc5PftLaM6C1kddQaYWqxQcPEq2pEyKNnE8ZIte3JK2XAxbPtCpqLA6Uu6APJz3/iz+ssiSDNaBqDRcshGExOPDmgDEJx8oeM8Jik2aorXh/dX3StHYKIcgRNTdS3HxhEgZ7Wcx9ZVcvKXFvdnEqpVxpa5LqmXFqrb7v54uRVfTAXIAXILBgfvCwzA38DrJ7DarPR119mzE2MVm52Cv/kpthzjwVpr3GQFpw8jH7QCYDNFEO6lH9Q6gImrWo6xVwK/j9vcDt/Uk6v/n98qHf9jq93JraNpnWTVFeh77P7Kk5e204ZRJ5SZrxT8BR4eAPKjEbbgIURoFGLkw20/YpKc3hacfIVVSx0x1RwbVTtI/8Zn1G96Rk8JTv6sodDgthzy4Y9WLLGWSWO1f8wkj+xquJ9Qtsiuymdh2tiBY6yX6ys4tnHHHrPGaa/RSSI6+aC7KIKTt1BLhntyF8p/acyeDK0PLc4AAAAASUVORK5CYII=">
-                            <div class="pl-3 text-base " :class="voucher ? 'text-black' : 'text-gray-600'">{{ voucher ? voucher : 'Makin hemat dengan promo' }}</div>
+                                
+                            <div class="pl-3 text-sm" v-if="!voucher" :class="voucher ? 'text-black' : 'text-gray-600'">
+                                {{ voucher ? voucher : 'Makin hemat dengan promo' }}</div>
+                                <div class="pl-3 text-sm" v-if="voucher" :class="voucher ? 'text-black' : 'text-gray-600'">Voucher digunakan<br>{{ voucher }}<br>{{ rupiahFormat(stringToNumber(disc)) }}</div>
                         </div>
-
+                        <div class="flex items-center">
+                            <i class="bi bi-x-circle mr-2" v-if="voucher" @click.stop="voucher = ''; disc = 0" style="cursor:pointer;font-size:23px;color:black;"></i>
                         <svg width="30px" height="30px" viewBox="-3 0 32 32" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <g id="icomoon-ignore">
@@ -234,6 +240,7 @@
 
                             </path>
                         </svg>
+                    </div>
 
 
                     </div>
@@ -249,13 +256,14 @@
                     </div>
                     <div class="flex justify-between text-base mt-2 mb-5">
                         <div class="font-bold">Total Pembelian</div>
-                        <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket - disc)) }}</div>
+                        <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket - disc)) }}
+                        </div>
                     </div>
                     <button type="button" :disabled="!choosePacket" @click="redirectPayment()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Pembayaran</button>
 
                 </div>
-                <div class="p-3 border-b border-gray-200" v-if="type == 'auto'">                  
+                <div class="p-3 border-b border-gray-200" v-if="type == 'auto'">
                     <div class="flex justify-between text-base mt-2 mb-5">
                         <div class="font-bold">Total Pembelian</div>
                         <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket)) }}</div>
@@ -280,6 +288,7 @@
 
     const $toast = useToast();
     const router = useRouter();
+    const route = useRoute();
 
     const pageStatus = ref('standby');
     const title = ref('');
@@ -311,21 +320,14 @@
     const autoDebet = ref(false);
 
     useSeoMeta({
-        title: 'My Amazing Site',
-        ogTitle: 'My Amazing Site',
-        description: 'This is my amazing site, let me tell you all about it.',
-        ogDescription: 'This is my amazing site, let me tell you all about it.',
+        title: 'Nex Web Page',
+        ogTitle: 'Nex Web Page',
+        description: 'Nex Web Page',
+        ogDescription: 'Nex Web Page',
         twitterCard: 'summary_large_image',
     })
 
-    onBeforeRouteLeave((to, from, next) => {
-        if ($('.banner').hasClass('slick-initialized')) {
-            $('.banner').slick('destroy');
-        }
-        next()
-    })
-
-    onMounted(() => {
+    onMounted(() => {       
         if (sessionStorage.getItem('phone')) {
             phone.value = sessionStorage.getItem('phone');
             sessionStorage.removeItem('phone');
@@ -404,10 +406,10 @@
                 if (smc.value && type.value == 'regular') {
                     getPacketRegular()
                 }
-
                 setTimeout(() => {
                     initSlider()
-                }, 500);
+                }, 1);
+
             } else {
                 $toast.open({
                     message: response.data.message,
@@ -447,9 +449,10 @@
                     getPacketAutoDebet()
                 }
 
+
                 setTimeout(() => {
                     initSlider()
-                }, 500);
+                }, 1);
             } else {
                 $toast.open({
                     message: response.data.message,
@@ -470,14 +473,11 @@
     }
 
     function initSlider() {
-        $('.banner').slick({
-            infinite: true,
-            speed: 500,
-            auto: true,
-            dots: false,
-            arrows: false,
-            slidesToShow: 1,
-            adaptiveHeight: true
+        $('.banner').owlCarousel({
+            items: 1,
+            loop: true,
+            margin: 0,
+            autoPlay : 1500,            
         });
     }
 
@@ -605,7 +605,7 @@
 
                 if (sessionStorage.getItem('packet')) {
                     let check = packetAutoDebet.value.findIndex((e) => e.id == sessionStorage.getItem('packet'))
-                    if (check >= 0) {                      
+                    if (check >= 0) {
                         choosePacket.value = sessionStorage.getItem('packet');
                         if (packetAutoDebet.value[check].promoprice) {
                             pricePacket.value = packetAutoDebet.value[check].promoprice;
@@ -737,7 +737,8 @@
                 smc: smc.value,
                 phone: phone.value,
                 packet: choosePacket.value,
-                type: type.value
+                type: type.value,
+                voucher: voucher.value
             }
         })
     }
@@ -838,7 +839,7 @@
         if (disc.value) {
             sessionStorage.setItem('disc', disc.value);
         }
-        
+
         sessionStorage.setItem('type', type.value);
         router.push({
             path: '/input-promo',

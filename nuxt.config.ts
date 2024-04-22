@@ -10,9 +10,15 @@ export default defineNuxtConfig({
   app: {
 
     head: {
-      link: [{
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/assets/logo.jpg'
+        },
+        {
           rel: 'stylesheet',
-          href: 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css'
+          href: 'https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css'
         },
         {
           rel: 'stylesheet',
@@ -23,7 +29,7 @@ export default defineNuxtConfig({
           src: "https://code.jquery.com/jquery-3.6.0.min.js",
         },
         {
-          src: 'https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js'
+          src: 'https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js'
         }
       ],
     },

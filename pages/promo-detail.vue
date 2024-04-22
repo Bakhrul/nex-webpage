@@ -39,6 +39,15 @@
     const title = ref('');
     const content = ref('');
 
+
+    useSeoMeta({
+        title: 'Nex Web Page',
+        ogTitle: 'Nex Web Page',
+        description: 'Nex Web Page',
+        ogDescription: 'Nex Web Page',
+        twitterCard: 'summary_large_image',
+    })
+    
     onMounted(() => {
 
         pageStatus.value = 'page-load';
