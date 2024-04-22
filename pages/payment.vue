@@ -281,8 +281,7 @@
                     } else if (payment.value == 'SHOPPEE') {
                         location.replace(response.data.data.paymenturl)
                     }
-                }
-                pageStatus.value = 'standby';
+                }                
 
             } else {
                 $toast.open({
