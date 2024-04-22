@@ -290,7 +290,7 @@
     const router = useRouter();
     const route = useRoute();
 
-    const pageStatus = ref('standby');
+    const pageStatus = ref('home-load');
     const title = ref('');
     const subTitle = ref('');
 

@@ -290,7 +290,7 @@
     const router = useRouter();
     const route = useRoute();
 
-    const pageStatus = ref('standby');
+    const pageStatus = ref('home-load');
     const title = ref('');
     const subTitle = ref('');
 
@@ -738,7 +738,8 @@
                 phone: phone.value,
                 packet: choosePacket.value,
                 type: type.value,
-                voucher: voucher.value
+                voucher: voucher.value,
+                refcode: ''
             }
         })
     }
