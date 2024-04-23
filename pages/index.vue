@@ -101,7 +101,7 @@
                             v-if="index <= lastShowIndexPromoRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);max-height:200px;">
+                                    style="filter:blur(1px);height:200px;object-fit: cover;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-3">
@@ -135,8 +135,8 @@
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreRegular == 'promo-regular'">
-                        <div class="w-full flex justify-center" style="background:rgba(255,255,255,0.98)">
-                            <button class="text-blue-700 font-bold" @click="viewMoreRegular()">Lihat Semua</button>
+                        <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
+                            <button class="text-blue-700 font-bold" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -149,7 +149,7 @@
                             v-if="index <= lastShowIndexRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);max-height:200px;">
+                                    style="filter:blur(1px);height:200px;object-fit: cover;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-3">
@@ -183,8 +183,8 @@
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreRegular == 'regular'">
-                        <div class="w-full flex justify-center" style="background:rgba(255,255,255,0.98)">
-                            <button class="text-blue-700 font-bold" @click="viewMoreRegular()">Lihat Semua</button>
+                        <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
+                            <button class="text-blue-700 font-bold" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -194,7 +194,7 @@
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:320px"
                             v-if="index <= lastShowIndexAutoDebet">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
-                                <img :src="context.bannerurl" class="w-full rounded-lg" style="filter:blur(1px);max-height:200px;">
+                                <img :src="context.bannerurl" class="w-full rounded-lg" style="filter:blur(1px);height:200px;object-fit: cover;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-3">
@@ -229,8 +229,8 @@
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreAutoDebet">
-                        <div class="w-full flex justify-center" style="background:rgba(255,255,255,0.98)">
-                            <button class="text-blue-700 font-bold" @click="viewMoreAutoDebet()">Lihat Semua</button>
+                        <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
+                            <button class="text-blue-700 font-bold" style="height:50px;" @click="viewMoreAutoDebet()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
