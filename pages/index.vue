@@ -136,7 +136,7 @@
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreRegular == 'promo-regular'">
                         <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,7 @@
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreRegular == 'regular'">
                         <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -230,7 +230,7 @@
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreAutoDebet">
                         <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold" style="height:50px;" @click="viewMoreAutoDebet()">Lihat Semua</button>
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" @click="viewMoreAutoDebet()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
