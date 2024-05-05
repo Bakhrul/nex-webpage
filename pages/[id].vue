@@ -85,7 +85,7 @@
                             class="w-full p-3 border-gray-300 rounded-xl border" v-model="smc"
                             placeholder="Masukan No SMC ID" />
                     </div>
-                    <button type="button" :disabled="!smc || pageStatus == 'packet-load' || pageStatus == 'home-load'"
+                    <button type="button" :disabled="checkDisabledProcess() || pageStatus == 'packet-load' || pageStatus == 'home-load'"
                         @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button>
                 </div>
@@ -1046,5 +1046,19 @@
         } else {
             return Number(e);
         }
+    }
+
+    function checkDisabledProcess(){
+        if(type.value == 'regular'){
+            if(!smc.value){
+                return true;
+            }
+        }else{
+            if(!smc.value || !phone.value){
+                return true;
+            }
+        }
+
+        return false;
     }
 </script>

@@ -90,13 +90,12 @@
     })
 
     function redirectPromo(id) {
-        let resove = router.resolve({
+        router.push({
             path: '/promo-detail',
             query: {
                 id: id
             }
-        })
-        window.open(resove.href, '_blank');
+        })        
 
 
     }
