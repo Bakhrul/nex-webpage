@@ -193,7 +193,8 @@
                     </div>
                 </div>
 
-                <div class="p-3 border-b border-gray-200 relative" v-if="type == 'auto' && lastShowIndexAutoDebet >= 0 && packetAutoDebet.length > 0">
+                <div class="p-3 border-b border-gray-200 relative"
+                    v-if="type == 'auto' && lastShowIndexAutoDebet >= 0 && packetAutoDebet.length > 0">
                     <template v-for="(context, index) in packetAutoDebet">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:320px"
                             v-if="index <= lastShowIndexAutoDebet">
@@ -416,6 +417,34 @@
 
 
     })
+
+    function resetHome() {
+        phone.value = ''
+        smc.value = ''
+
+        voucher.value = '';
+        disc.value = 0;
+
+        choosePacket.value = '';
+        pricePacket.value = 0;
+        canChoosePacket.value = false;
+
+        autoDebet.value = false;
+
+        lastShowIndexPromoRegular.value = -1;
+        lastShowIndexRegular.value = -1;
+        showLoadMoreRegular.value = false;
+
+
+        lastShowIndexAutoDebet.value = -1;
+        showLoadMoreAutoDebet.value = false;
+
+        if(type.value == 'regular'){
+            homeReguler()
+        }else{
+            homeAutoDebet()
+        }
+    }
 
     function homeReguler() {
         pageStatus.value = 'home-load'
@@ -712,6 +741,7 @@
                 }
                 canChoosePacket.value = true;
             } else {
+                resetHome();
                 $toast.open({
                     message: response.data.message,
                     type: 'error',
@@ -789,6 +819,7 @@
                 }
                 canChoosePacket.value = true;
             } else {
+                resetHome();
                 $toast.open({
                     message: response.data.message,
                     type: 'error',
