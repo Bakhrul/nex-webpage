@@ -61,17 +61,17 @@
                     <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
-                            @click="type = 'regular';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler()"
+                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;"
                             :class="type == 'regular' ? 'active' : ''" class="option-type mt-3 mr-3">Reguler</button>
                         <button type="button"
-                            @click="type = 'auto';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet()"
+                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;"
                             :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button>
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
-                        <input type="number"
-                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = '';"
-                            class="w-full p-3 border-gray-300 rounded-xl border" v-model="phone"
+                        <input type="number" @keydown="checkDigit"
+                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; phone = $event.target.value.toString()"
+                            class="w-full p-3 border-gray-300 rounded-xl border" :value="phone"
                             placeholder="Masukan No Handphone" />
                         <div class="text-xs text-gray-600 pt-1">Mohon input nomor HP yang dapat dihubungi supaya
                             dapat
@@ -80,12 +80,13 @@
                     </div>
                     <div class="mt-3">
                         <div class="font-semibold mb-2">No SMC ID</div>
-                        <input type="number"
-                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = '';"
-                            class="w-full p-3 border-gray-300 rounded-xl border" v-model="smc"
+                        <input type="number" @keydown="checkDigit"
+                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString()"
+                            class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                             placeholder="Masukan No SMC ID" />
                     </div>
-                    <button type="button" :disabled="checkDisabledProcess() || pageStatus == 'packet-load' || pageStatus == 'home-load'"
+                    <button type="button"
+                        :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load'"
                         @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button>
                 </div>
@@ -135,8 +136,10 @@
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreRegular == 'promo-regular'">
-                        <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
+                        <div class="w-full flex justify-center items-end pb-5"
+                            style="background:linear-gradient(55deg, #fff, transparent)">
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;"
+                                @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -183,8 +186,10 @@
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreRegular == 'regular'">
-                        <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" @click="viewMoreRegular()">Lihat Semua</button>
+                        <div class="w-full flex justify-center items-end pb-5"
+                            style="background:linear-gradient(55deg, #fff, transparent)">
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;"
+                                @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -194,12 +199,13 @@
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:320px"
                             v-if="index <= lastShowIndexAutoDebet">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
-                                <img :src="context.bannerurl" class="w-full rounded-lg" style="filter:blur(1px);height:200px;object-fit: cover;">
+                                <img :src="context.bannerurl" class="w-full rounded-lg"
+                                    style="filter:blur(1px);height:200px;object-fit: cover;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-3">
                                     <div>
-                                        <div class="text-base font-semibold line-clamp-1">{{context.paketname}}</div>                                        
+                                        <div class="text-base font-semibold line-clamp-1">{{context.paketname}}</div>
                                     </div>
                                     <div style="width:130px">
                                         <template v-if="context.promoprice">
@@ -229,8 +235,10 @@
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:25px;width:100%;height:320px;"
                         v-if="showLoadMoreAutoDebet">
-                        <div class="w-full flex justify-center items-end pb-5" style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" @click="viewMoreAutoDebet()">Lihat Semua</button>
+                        <div class="w-full flex justify-center items-end pb-5"
+                            style="background:linear-gradient(55deg, #fff, transparent)">
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;"
+                                @click="viewMoreAutoDebet()">Lihat Semua</button>
                         </div>
                     </div>
                 </div>
@@ -302,7 +310,7 @@
                         <div class="font-bold">Total Pembelian</div>
                         <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket)) }}</div>
                     </div>
-                    <button type="button" :disabled="!autoDebet || !choosePacket" @click="redirectPayment()"
+                    <button type="button" :disabled="disabledButtonPayment()" @click="redirectPayment()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Pembayaran</button>
 
                 </div>
@@ -467,7 +475,7 @@
                 } else {
                     if (packetRegular.value.length >= 3) {
                         lastShowIndexRegular.value = 2
-                    }else{
+                    } else {
                         lastShowIndexRegular.value = packetRegular.value.length - 1;
                     }
 
@@ -517,7 +525,7 @@
             if (response.data.success) {
                 pageStatus.value = 'standby';
                 banner.value = response.data.data.banner;
-                packetAutoDebet.value = response.data.data.paket;                
+                packetAutoDebet.value = response.data.data.paket;
 
                 title.value = response.data.data.pakettitle;
                 subTitle.value = response.data.data.paketsubtitle;
@@ -525,8 +533,7 @@
                 if (packetAutoDebet.value.length) {
                     if (packetAutoDebet.value.length == 1) {
                         lastShowIndexAutoDebet.value = 0;
-                    } else
-                    if (packetAutoDebet.value.length == 2) {
+                    } else if (packetAutoDebet.value.length == 2) {
                         lastShowIndexAutoDebet.value = 1;
                     } else if (packetAutoDebet.value.length >= 3) {
                         lastShowIndexAutoDebet.value = 2
@@ -686,7 +693,7 @@
                 } else {
                     if (packetRegular.value.length >= 3) {
                         lastShowIndexRegular.value = 2
-                    }else{
+                    } else {
                         lastShowIndexRegular.value = packetRegular.value.length - 1;
                     }
 
@@ -803,6 +810,11 @@
     }
 
     function redirectPacket(id, typePacket) {
+
+        if(!canChoosePacket.value){
+            return false;
+        }
+
         if (phone.value) {
             sessionStorage.setItem('phone', phone.value);
         }
@@ -940,6 +952,11 @@
     }
 
     function clickedAutoDebet() {
+
+        if(!canChoosePacket.value){
+            return false;
+        }
+        
         if (autoDebet.value) {
             autoDebet.value = false
         } else {
@@ -1048,17 +1065,35 @@
         }
     }
 
-    function checkDisabledProcess(){
-        if(type.value == 'regular'){
-            if(!smc.value){
+    function checkDisabledProcess() {
+        if (type.value == 'regular') {
+            if (!smc.value) {
                 return true;
             }
-        }else{
-            if(!smc.value || !phone.value){
+        } else {
+            if (!smc.value || !phone.value) {
                 return true;
             }
         }
 
         return false;
     }
+
+    function disabledButtonPayment(){
+        if (type.value == 'regular') {
+            if (!choosePacket.value) {
+                return true;
+            }
+        } else {
+            if (!choosePacket.value || !autoDebet.value) {
+                return true;
+            }
+        }
+    }
+
+    const checkDigit = (event) => {
+        if (event.key.length === 1 && isNaN(Number(event.key))) {
+            event.preventDefault();
+        }
+    };
 </script>
