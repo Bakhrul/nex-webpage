@@ -93,7 +93,7 @@
                     <div class="loader"></div>
                 </div>
                 <div class="p-3 border-b border-gray-200 relative"
-                    v-if="type == 'regular' && lastShowIndexPromoRegular >= 0">
+                    v-if="type == 'regular' && lastShowIndexPromoRegular >= 0 && packetPromoRegular.length > 0">
                     <div class="text-lg font-bold">{{ titlePromo }}</div>
                     <div class="text-gray-600 mb-3">{{ subTitlePromo }}</div>
                     <template v-for="(context, index) in packetPromoRegular">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 <div class="p-3 border-b border-gray-200 relative"
-                    v-if="type == 'regular' && lastShowIndexRegular >= 0">
+                    v-if="type == 'regular' && lastShowIndexRegular >= 0 && packetRegular.length > 0">
                     <div class="text-lg font-bold">{{ title }}</div>
                     <div class="text-gray-600 mb-3">{{ subTitle }}</div>
                     <template v-for="(context, index) in packetRegular">
@@ -193,7 +193,7 @@
                     </div>
                 </div>
 
-                <div class="p-3 border-b border-gray-200 relative" v-if="type == 'auto' && lastShowIndexAutoDebet >= 0">
+                <div class="p-3 border-b border-gray-200 relative" v-if="type == 'auto' && lastShowIndexAutoDebet >= 0 && packetAutoDebet.length > 0">
                     <template v-for="(context, index) in packetAutoDebet">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:320px"
                             v-if="index <= lastShowIndexAutoDebet">
