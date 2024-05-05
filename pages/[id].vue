@@ -69,8 +69,7 @@
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
-                        <input type="number" @keydown="checkDigit"
-                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; phone = $event.target.value.toString()"
+                        <input type="number" @keydown="checkDigit" @input="phone = $event.target.value.toString()"
                             class="w-full p-3 border-gray-300 rounded-xl border" :value="phone"
                             placeholder="Masukan No Handphone" />
                         <div class="text-xs text-gray-600 pt-1">Mohon input nomor HP yang dapat dihubungi supaya
@@ -81,7 +80,7 @@
                     <div class="mt-3">
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <input type="number" @keydown="checkDigit"
-                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString()"
+                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString(); autoDebet = false"
                             class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                             placeholder="Masukan No SMC ID" />
                     </div>
@@ -811,7 +810,7 @@
 
     function redirectPacket(id, typePacket) {
 
-        if(!canChoosePacket.value){
+        if (!canChoosePacket.value) {
             return false;
         }
 
@@ -953,10 +952,10 @@
 
     function clickedAutoDebet() {
 
-        if(!canChoosePacket.value){
+        if (!canChoosePacket.value) {
             return false;
         }
-        
+
         if (autoDebet.value) {
             autoDebet.value = false
         } else {
@@ -1079,13 +1078,13 @@
         return false;
     }
 
-    function disabledButtonPayment(){
+    function disabledButtonPayment() {
         if (type.value == 'regular') {
             if (!choosePacket.value) {
                 return true;
             }
         } else {
-            if (!choosePacket.value || !autoDebet.value) {
+            if (!choosePacket.value || !autoDebet.value || !phone.value) {
                 return true;
             }
         }
