@@ -467,6 +467,8 @@
                 } else {
                     if (packetRegular.value.length >= 3) {
                         lastShowIndexRegular.value = 2
+                    }else{
+                        lastShowIndexRegular.value = packetRegular.value.length - 1;
                     }
 
                 }
@@ -523,8 +525,7 @@
                 if (packetAutoDebet.value.length) {
                     if (packetAutoDebet.value.length == 1) {
                         lastShowIndexAutoDebet.value = 0;
-                    } else
-                    if (packetAutoDebet.value.length == 2) {
+                    } else if (packetAutoDebet.value.length == 2) {
                         lastShowIndexAutoDebet.value = 1;
                     } else if (packetAutoDebet.value.length >= 3) {
                         lastShowIndexAutoDebet.value = 2
@@ -684,6 +685,8 @@
                 } else {
                     if (packetRegular.value.length >= 3) {
                         lastShowIndexRegular.value = 2
+                    }else{
+                        lastShowIndexRegular.value = packetRegular.value.length - 1;
                     }
 
                 }

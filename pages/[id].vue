@@ -467,6 +467,8 @@
                 } else {
                     if (packetRegular.value.length >= 3) {
                         lastShowIndexRegular.value = 2
+                    }else{
+                        lastShowIndexRegular.value = packetRegular.value.length - 1;
                     }
 
                 }
@@ -684,6 +686,8 @@
                 } else {
                     if (packetRegular.value.length >= 3) {
                         lastShowIndexRegular.value = 2
+                    }else{
+                        lastShowIndexRegular.value = packetRegular.value.length - 1;
                     }
 
                 }
