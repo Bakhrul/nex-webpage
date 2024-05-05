@@ -772,7 +772,7 @@
         pricePacket.value = 0
         canChoosePacket.value = false;
 
-        axios.get(config.public.API_URL + 'paketautodebet?smcid=' + smc.value, {
+        axios.get(config.public.API_URL + 'paketautodebet?smcid=' + smc.value + '&hpno=' + phone.value, {
             headers: {
                 'NEX-APIKEY': 'apikey-1234567890'
             }
