@@ -416,7 +416,7 @@
         } else {
             homeReguler()
         }
-        
+        hasVerticalScroll()
         window.addEventListener("scroll", hasVerticalScroll);
 
     })

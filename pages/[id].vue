@@ -416,7 +416,7 @@
         } else {
             homeReguler()
         }
-        
+        hasVerticalScroll()
         window.addEventListener("scroll", hasVerticalScroll);
 
     })
@@ -433,7 +433,7 @@
     }
 
     function scrollToBottom(){
-        hasVerticalScroll()
+        
         window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
         
     }
