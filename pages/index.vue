@@ -137,7 +137,7 @@
                         v-if="showLoadMoreRegular == 'promo-regular'">
                         <div class="w-full flex justify-center items-end pb-5"
                             style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold mb-5" style="height:50px;"
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" :disabled="!canChoosePacket"
                                 @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                         v-if="showLoadMoreRegular == 'regular'">
                         <div class="w-full flex justify-center items-end pb-5"
                             style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold mb-5" style="height:50px;"
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" :disabled="!canChoosePacket"
                                 @click="viewMoreRegular()">Lihat Semua</button>
                         </div>
                     </div>
@@ -237,7 +237,7 @@
                         v-if="showLoadMoreAutoDebet">
                         <div class="w-full flex justify-center items-end pb-5"
                             style="background:linear-gradient(55deg, #fff, transparent)">
-                            <button class="text-blue-700 font-bold mb-5" style="height:50px;"
+                            <button class="text-blue-700 font-bold mb-5" style="height:50px;" :disabled="!canChoosePacket"
                                 @click="viewMoreAutoDebet()">Lihat Semua</button>
                         </div>
                     </div>
@@ -262,7 +262,7 @@
                             <div class="pl-3 text-sm" v-if="!voucher" :class="voucher ? 'text-black' : 'text-gray-600'">
                                 {{ voucher ? voucher : 'Makin hemat dengan promo' }}</div>
                             <div class="pl-3 text-sm" v-if="voucher" :class="voucher ? 'text-black' : 'text-gray-600'">
-                                Voucher digunakan<br>{{ voucher }}<br>{{ rupiahFormat(stringToNumber(disc)) }}</div>
+                                Voucher promo digunakan<br>{{ rupiahFormat(stringToNumber(disc)) }}</div>
                         </div>
                         <div class="flex items-center">
                             <i class="bi bi-x-circle mr-2" v-if="voucher" @click.stop="voucher = ''; disc = 0"
@@ -314,6 +314,7 @@
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Pembayaran</button>
 
                 </div>
+                <div class="flex justify-center" v-if="showButtonScroll && !showLoadMoreAutoDebet && !showLoadMoreRegular" style="position:fixed;bottom:50px;z-index:99999;width:100%;max-width:480px"><button type="button" class="bg-white shadow-2xl border border-red" style="border-radius:100px;width:50px;height:50px;font-size:28px;border:1px orange solid !important;color:orangered !important" @click="scrollToBottom()"><i class="bi bi-arrow-down"></i></button></div>
             </div>
         </div>
     </div>
@@ -358,6 +359,8 @@
     const choosePacket = ref('');
     const pricePacket = ref(0);
     const canChoosePacket = ref(false)
+
+    const showButtonScroll = ref(true);
 
     const autoDebet = ref(false);
 
@@ -413,10 +416,27 @@
         } else {
             homeReguler()
         }
-
-
+        
+        window.addEventListener("scroll", hasVerticalScroll);
 
     })
+
+    
+    function hasVerticalScroll() {
+        
+        if(window.pageYOffset > document.body.scrollHeight - 700){
+            showButtonScroll.value = false
+        }else{
+            showButtonScroll.value = true;
+            }
+
+    }
+
+    function scrollToBottom(){
+        hasVerticalScroll()
+        window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
+        
+    }
 
     function resetHome() {
         phone.value = ''
@@ -444,6 +464,7 @@
         }else{
             homeAutoDebet()
         }
+         
     }
 
     function homeReguler() {
@@ -456,7 +477,7 @@
             if (response.data.success) {
                 pageStatus.value = 'standby';
                 banner.value = response.data.data.banner;
-                packetRegular.value = response.data.data.paket;
+                packetRegular.value = response.data.data.paket;                
 
                 packetPromoRegular.value = response.data.data.paketpromo;
 
@@ -1066,11 +1087,19 @@
         lastShowIndexPromoRegular.value = packetPromoRegular.value.length;
         lastShowIndexRegular.value = packetRegular.value.length;
         showLoadMoreRegular.value = false;
+
+        setTimeout(() => {
+            hasVerticalScroll()
+        }, 500);
     }
 
     function viewMoreAutoDebet() {
         lastShowIndexAutoDebet.value = packetAutoDebet.value.length;
         showLoadMoreAutoDebet.value = false;
+
+        setTimeout(() => {
+            hasVerticalScroll()
+        }, 500);
     }
 
     function offModalAutoDebet() {
