@@ -408,7 +408,7 @@
             sessionStorage.removeItem('disc');
         }
 
-
+        window.scrollTo({ left: 0, top: 0 });
         pageStatus.value = 'home-load';
 
         if (type.value == 'auto') {
@@ -428,7 +428,7 @@
             showButtonScroll.value = false
         }else{
             showButtonScroll.value = true;
-            }
+        }
 
     }
 
