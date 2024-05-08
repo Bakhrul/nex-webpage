@@ -314,7 +314,7 @@
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Pembayaran</button>
 
                 </div>
-                <div class="flex justify-center" v-if="showButtonScroll && !showLoadMoreAutoDebet && !showLoadMoreRegular" style="position:fixed;bottom:50px;z-index:99999;width:100%;max-width:480px"><button type="button" class="bg-white shadow-2xl border border-red" style="border-radius:100px;width:50px;height:50px;font-size:28px;border:1px orange solid !important;color:orangered !important" @click="scrollToBottom()"><i class="bi bi-arrow-down"></i></button></div>
+                <div class="flex justify-center" v-if="showButtonScroll && !showLoadMoreAutoDebet && !showLoadMoreRegular && (packetAutoDebet.length || packetRegular.length || packetPromoRegular.length)" style="position:fixed;bottom:50px;z-index:99999;width:100%;max-width:480px"><button type="button" class="bg-white shadow-2xl border border-red" style="border-radius:100px;width:50px;height:50px;font-size:28px;border:1px orange solid !important;color:orangered !important" @click="scrollToBottom()"><i class="bi bi-arrow-down"></i></button></div>
             </div>
         </div>
     </div>
