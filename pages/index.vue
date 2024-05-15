@@ -68,7 +68,7 @@
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <div class="relative w-full">
                             <input type="number" @keydown="checkDigit" maxlength="16"
-                                @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0,16); autoDebet = false;checkSMCID()"
+                                @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString(); autoDebet = false;checkSMCID()"
                                 class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                                 placeholder="Masukan No SMC ID" />
                             <div v-if="validSMC == 'yes'"
@@ -427,26 +427,24 @@
 
     function checkSMCID() {
         validSMC.value = '';
-        setTimeout(() => {
-            if (smc.value.length !== 16) {
-
-                return false;
+        if (smc.value.length !== 16) {
+            return false;
+        }
+        
+        validSMC.value = 'loading';
+        axios.get(config.public.API_URL + 'checksmcid?smcid=' + smc.value, {
+            headers: {
+                'NEX-APIKEY': 'apikey-1234567890'
             }
-            validSMC.value = 'loading';
-            axios.get(config.public.API_URL + 'checksmcid?smcid=' + smc.value, {
-                headers: {
-                    'NEX-APIKEY': 'apikey-1234567890'
-                }
-            }).then(response => {
-                if (response.data.success) {
-                    validSMC.value = 'yes';
-                } else {
-                    validSMC.value = 'no';
-                }
-            }).catch(error => {
+        }).then(response => {
+            if (response.data.success) {
+                validSMC.value = 'yes';
+            } else {
                 validSMC.value = 'no';
-            });
-        }, 500);
+            }
+        }).catch(error => {
+            validSMC.value = 'no';
+        });
 
     }
 
