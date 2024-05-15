@@ -29,20 +29,23 @@
                     </div>
                     <template v-else>
                         <div class="text-xl font-bold">Pilih Pembayaran</div>
-                        <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
-                            v-for="a in listPaymentAutoDebet" @click="payment = a.paymentid">
-                            <div class="flex items-center">
-                                <div style="width:70px">
-                                    <img :src="a.iconurl" style="max-width:50px;width:auto;">
+                        <template v-for="context in listPaymentAutoDebet">
+                            <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
+                            <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
+                                v-for="a in context.paymentdet" @click="payment = a.paymentid">
+                                <div class="flex items-center">
+                                    <div style="width:70px">
+                                        <img :src="a.iconurl" style="max-width:50px;width:auto;">
+                                    </div>
+                                    <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentid}}</div>
                                 </div>
-                                <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentid}}</div>
-                            </div>
-                            <div>
-                                <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
-                                    <div class="circle"></div>
+                                <div>
+                                    <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
+                                        <div class="circle"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                         <template v-for="context in listPaymentRegular">
                             <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
                             <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"

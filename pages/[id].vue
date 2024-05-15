@@ -29,6 +29,7 @@
                 <div class="p-3">
                     <div class="flex justify-between items-center">
                         <div class="font-bold text-lg">Kejar Promo Hari Ini</div>
+                        <div style="color:#0E64B2 !important;">Lihat Semua</div>
                         <svg width="30px" height="30px" viewBox="-3 0 32 32" version="1.1" style="cursor:pointer;"
                             @click="redirectAllPromo()" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink">
