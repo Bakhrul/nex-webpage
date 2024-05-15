@@ -67,14 +67,22 @@
                     <div class="mt-3">
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <div class="relative w-full">
-                        <input type="number" @keydown="checkDigit"
-                            @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString(); autoDebet = false;checkSMCID()"
-                            class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
-                            placeholder="Masukan No SMC ID" />
-                            <div v-if="validSMC == 'yes'" style="position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:100px;" class="text-white bg-green-600 flex items-center justify-center">
+                            <input type="number" @keydown="checkDigit" maxlength="16"
+                                @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0,16); autoDebet = false;checkSMCID()"
+                                class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
+                                placeholder="Masukan No SMC ID" />
+                            <div v-if="validSMC == 'yes'"
+                                style="position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:100px;"
+                                class="text-white bg-green-500 flex items-center justify-center">
                                 <i class="bi bi-check"></i>
                             </div>
-                            <div v-if="validSMC == 'loading'"  style="position:absolute;right:10px;bottom:10px;border-radius:100px;">
+                            <div v-if="validSMC == 'no'"
+                                style="position:absolute;right:10px;bottom:10px;width:20px;height:20px;border-radius:100px;"
+                                class="text-white bg-red-500 flex items-center justify-center">
+                                <i class="bi bi-x"></i>
+                            </div>
+                            <div v-if="validSMC == 'loading'"
+                                style="position:absolute;right:10px;bottom:10px;border-radius:100px;">
                                 <div class="loader-small"></div>
                             </div>
                         </div>
@@ -82,7 +90,7 @@
                             dan tekan proses jika ingin memilih paket langganan di bawah ini</div>
                     </div>
                     <button type="button"
-                        :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load'"
+                        :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load' || validSMC != 'yes'"
                         @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button>
                 </div>
@@ -243,11 +251,11 @@
                     <div class="flex items-center justify-between" style="cursor:pointer;"
                         @click="redirectInputPromo()">
                         <div class="flex items-center">
-                            <img src="~/assets/icon-discount.png" style="width:30px" />                                                      
+                            <img src="~/assets/icon-discount.png" style="width:30px" />
                             <div class="pl-3 text-sm" :class="voucher ? 'text-black' : 'text-black'">
-                                {{ voucher ? '1 Voucher digunakan' : 'Makin hemat pakai promo' }}</div>                            
+                                {{ voucher ? '1 Voucher digunakan' : 'Makin hemat pakai promo' }}</div>
                         </div>
-                        <div class="flex items-center">                           
+                        <div class="flex items-center">
                             <svg width="30px" height="30px" viewBox="-3 0 32 32" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="icomoon-ignore">
@@ -368,8 +376,8 @@
     })
 
     onMounted(() => {
-       
-       
+
+
 
         if (sessionStorage.getItem('phone')) {
             phone.value = sessionStorage.getItem('phone');
@@ -417,26 +425,31 @@
     })
 
 
-    function checkSMCID(){
-        if(smc.value.length !== 16){
-            validSMC.value = '';
-            return false;
-        }
-        validSMC.value = 'loading';
-        axios.get(config.public.API_URL + 'checksmcid?smcid=' + smc.value, {
-            headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+    function checkSMCID() {
+        validSMC.value = '';
+        setTimeout(() => {
+            if (smc.value.length !== 16) {
+
+                return false;
             }
-        }).then(response => {
-            if (response.data.success) {
-                validSMC.value = 'yes';
-            }else{
-                validSMC.value = '';
-            }
-        }).catch(error => {
-            validSMC.value = '';
-        });
+            validSMC.value = 'loading';
+            axios.get(config.public.API_URL + 'checksmcid?smcid=' + smc.value, {
+                headers: {
+                    'NEX-APIKEY': 'apikey-1234567890'
+                }
+            }).then(response => {
+                if (response.data.success) {
+                    validSMC.value = 'yes';
+                } else {
+                    validSMC.value = 'no';
+                }
+            }).catch(error => {
+                validSMC.value = 'no';
+            });
+        }, 500);
+
     }
+
     function hasVerticalScroll() {
 
         if (window.pageYOffset > document.body.scrollHeight - 1000) {
@@ -462,7 +475,7 @@
         smc.value = ''
 
         validSMC.value = '';
-        
+
         voucher.value = '';
         disc.value = 0;
 
@@ -1091,12 +1104,12 @@
             router.push({
                 path: '/detail-voucher',
                 query: {
-                    id: voucher.value,  
-                    flag: 'remove'               
+                    id: voucher.value,
+                    flag: 'remove'
                 }
 
             })
-        }else{
+        } else {
             router.push({
                 path: '/input-promo',
                 query: {
