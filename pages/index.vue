@@ -47,10 +47,10 @@
                     <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
-                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;"
+                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = ''"
                             :class="type == 'regular' ? 'active' : ''" class="option-type mt-3 mr-3">Reguler</button>
                         <button type="button"
-                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;"
+                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = ''"
                             :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button>
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
@@ -337,7 +337,7 @@
 
     const type = ref('regular');
     const phone = ref('');
-    const smc = ref('8004564171407012')
+    const smc = ref('')
     const validSMC = ref('');
 
     const voucher = ref('');
@@ -461,6 +461,8 @@
         phone.value = ''
         smc.value = ''
 
+        validSMC.value = '';
+        
         voucher.value = '';
         disc.value = 0;
 
