@@ -370,7 +370,7 @@
 
     const type = ref('regular');
     const phone = ref('');
-    const smc = ref('8004564171407012')
+    const smc = ref('')
     const validSMC = ref('');
 
     const voucher = ref('');
