@@ -23,33 +23,37 @@
                 <div class="flex w-full border-b border-gray-200 px-3 py-2 flex justify-center">
                     <img src="~/assets/logo.jpg" style="width:150px" />
                 </div>
-                <div class="p-3">
+                <div>
                     <div v-if="pageStatus == 'page-load'" class="flex justify-center mt-5">
                         <div class="loader"></div>
                     </div>
                     <template v-else>
-                        <div class="text-xl font-bold">Pilih Pembayaran</div>
+                        <div class="p-3 text-xl font-bold">Pilih Pembayaran</div>
                         <template v-for="context in listPaymentAutoDebet">
-                            <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
-                            <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
-                                v-for="a in context.paymentdet" @click="payment = a.paymentid">
-                                <div class="flex items-center">
-                                    <div style="width:70px">
-                                        <img :src="a.iconurl" style="max-width:50px;width:auto;">
+                            <div class="p-3" :style="index != listPaymentRegular.length - 1 ? 'border-bottom:3px #ddd solid' : ''">
+                                <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
+                                <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
+                                    v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
+                                    <div class="flex items-center">
+                                        <div style="width:70px">
+                                            <img :src="a.iconurl" style="max-width:50px;width:auto;">
+                                        </div>
+                                        <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentid}}
+                                        </div>
                                     </div>
-                                    <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentid}}</div>
-                                </div>
-                                <div>
-                                    <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
-                                        <div class="circle"></div>
+                                    <div>
+                                        <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
+                                            <div class="circle"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </template>
-                        <template v-for="context in listPaymentRegular">
+                        <template v-for="(context, index) in listPaymentRegular">
+                            <div class="p-3" :style="index != listPaymentRegular.length - 1 ? 'border-bottom:3px #ddd solid' : ''">
                             <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
                             <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
-                                v-for="a in context.paymentdet" @click="payment = a.paymentid">
+                                v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
                                 <div class="flex items-center">
                                     <div style="width:70px">
                                         <img :src="a.iconurl" style="max-width:50px;width:auto;">
@@ -60,6 +64,7 @@
                                     <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
                                         <div class="circle"></div>
                                     </div>
+                                </div>
                                 </div>
                             </div>
                         </template>
@@ -219,7 +224,7 @@
 
             if (payment.value == 'DANA') {
                 urlX = 'paymentautodebet/danalink'
-            } else if (payment.value == 'OVO') {                
+            } else if (payment.value == 'OVO') {
                 urlX = 'paymentautodebet/ovolink'
             } else if (payment.value == 'SHOPPEE') {
                 urlX = 'paymentautodebet/shopeelink'
@@ -247,6 +252,7 @@
             },
         }).then(response => {
             if (response.data.success) {
+                sessionStorage.clear()
                 if (type == 'regular') {
                     if (payment.value == 'DANA') {
                         location.replace(response.data.data.paymenturl)
@@ -276,7 +282,7 @@
                             path: '/virtual-account',
                         })
                     }
-                } else {                 
+                } else {
                     if (payment.value == 'DANA') {
                         location.replace(response.data.data.paymenturl)
                     } else if (payment.value == 'OVO') {
@@ -284,7 +290,7 @@
                     } else if (payment.value == 'SHOPPEE') {
                         location.replace(response.data.data.paymenturl)
                     }
-                }                
+                }
 
             } else {
                 $toast.open({
