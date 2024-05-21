@@ -47,10 +47,10 @@
                     <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
-                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = ''"
+                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
                             :class="type == 'regular' ? 'active' : ''" class="option-type mt-3 mr-3">Reguler</button>
                         <button type="button"
-                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = ''"
+                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
                             :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button>
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
@@ -67,8 +67,8 @@
                     <div class="mt-3">
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <div class="relative w-full">
-                            <input type="number" @keydown="checkDigit" maxlength="16"
-                                @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString(); autoDebet = false;checkSMCID()"
+                            <input type="number" @keydown="checkDigit($event)" maxlength="16"
+                                @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0, 16); autoDebet = false; validSMC = false; showRegular = false; showRegularPromo = false; showAutoDebet = false; checkSMCID()"
                                 class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                                 placeholder="Masukan No SMC ID" />
                             <div v-if="validSMC == 'yes'"
@@ -89,19 +89,26 @@
                         <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Masukan nomor SMC ID diatas
                             dan tekan proses jika ingin memilih paket langganan di bawah ini</div>
                     </div>
-                    <button type="button"
+                    <!-- <button type="button"
                         :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load' || validSMC != 'yes'"
                         @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
-                        class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button>
+                        class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button> -->
                 </div>
                 <div v-if="pageStatus == 'packet-load' || pageStatus == 'home-load'" class="flex justify-center mt-5">
                     <div class="loader"></div>
                 </div>
-                <div class="p-3 pb-10 border-b border-gray-200 relative"
-                    v-if="type == 'regular' && lastShowIndexPromoRegular >= 0 && packetPromoRegular.length > 0">
-                    <div class="text-lg font-bold">{{ titlePromo }}</div>
-                    <div class="text-gray-600 mb-3">{{ subTitlePromo }}</div>
-                    <template v-for="(context, index) in packetPromoRegular">
+                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'regular'">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="text-lg font-bold">{{ titlePromo }}</div>
+                            <div class="text-gray-600 mb-3">{{ subTitlePromo }}</div>
+                        </div>
+                        <div v-if="titlePromo"> <button type="button" class="bg-white shadow-2xl border border-red"
+                                style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
+                                @click="validSMC == 'yes' ? showRegularPromo = !showRegularPromo : ''"><i class="bi "
+                                    :class="showRegularPromo ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
+                    </div>
+                    <template v-for="(context, index) in packetPromoRegular" v-if="showRegularPromo">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
                             v-if="index <= lastShowIndexPromoRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
@@ -139,7 +146,7 @@
                     </template>
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:0;width:100%;height:255px;"
-                        v-if="showLoadMoreRegular == 'promo-regular'">
+                        v-if="showLoadMoreRegular == 'promo-regular' && showRegularPromo">
                         <div class="w-full flex justify-center items-end"
                             style="background:linear-gradient(55deg, #fff, transparent)">
                             <button class="text-blue-700 font-bold" style="height:50px;" :disabled="!canChoosePacket"
@@ -147,11 +154,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-3 pb-10 border-b border-gray-200 relative"
-                    v-if="type == 'regular' && lastShowIndexRegular >= 0 && packetRegular.length > 0">
-                    <div class="text-lg font-bold">{{ title }}</div>
-                    <div class="text-gray-600 mb-3">{{ subTitle }}</div>
-                    <template v-for="(context, index) in packetRegular">
+                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'regular'">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="text-lg font-bold">{{ title }}</div>
+                            <div class="text-gray-600 mb-3">{{ subTitle }}</div>
+                        </div>
+                        <div v-if="title"> <button type="button" class="bg-white shadow-2xl border border-red"
+                                style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
+                                @click="validSMC == 'yes' ? showRegular = !showRegular : ''"><i class="bi "
+                                    :class="showRegular ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
+                    </div>
+                    <template v-for="(context, index) in packetRegular" v-if="showRegular">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
                             v-if="index <= lastShowIndexRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
@@ -189,7 +203,7 @@
                     </template>
                     <div class="flex justify-center px-3 rounded"
                         style="left:0;z-index:2;position:absolute;bottom:0;width:100%;height:255px;"
-                        v-if="showLoadMoreRegular == 'regular'">
+                        v-if="showLoadMoreRegular == 'regular' && showRegular">
                         <div class="w-full flex justify-center items-end"
                             style="background:linear-gradient(55deg, #fff, transparent)">
                             <button class="text-blue-700 font-bold" style="height:50px;" :disabled="!canChoosePacket"
@@ -198,9 +212,18 @@
                     </div>
                 </div>
 
-                <div class="p-3 pb-10 border-b border-gray-200 relative"
-                    v-if="type == 'auto' && lastShowIndexAutoDebet >= 0 && packetAutoDebet.length > 0">
-                    <template v-for="(context, index) in packetAutoDebet">
+                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'auto'">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <div class="text-lg font-bold">{{ title }}</div>
+                            <div class="text-gray-600 mb-3">{{ subTitle }}</div>
+                        </div>
+                        <div v-if="title"> <button type="button" class="bg-white shadow-2xl border border-red"
+                                style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
+                                @click="validSMC == 'yes' ? showAutoDebet = !showAutoDebet : ''"><i class="bi "
+                                    :class="showAutoDebet ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
+                    </div>
+                    <template v-for="(context, index) in packetAutoDebet" v-if="showAutoDebet">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
@@ -246,7 +269,7 @@
                         <div class="text-black font-medium text-sm">Saya Setuju Auto Debet</div>
                     </div>
                 </div>
-                <div class="p-3 border-b border-gray-200" v-if="type == 'regular'">
+                <div class="p-3 border-b border-gray-200" v-if="type == 'regular'" id="section-voucher">
 
                     <div class="flex items-center justify-between" style="cursor:pointer;"
                         @click="redirectInputPromo()">
@@ -255,7 +278,9 @@
                             <div class="pl-3 text-sm" :class="voucher ? 'text-black' : 'text-black'">
                                 {{ voucher ? '1 Voucher digunakan' : 'Makin hemat pakai promo' }}</div>
                         </div>
-                        <div class="flex items-center">
+                        <div class="" v-if="voucher" @click.stop="voucher = ''; disc = 0"><i class="bi bi-x-circle text-2xl"
+                                style="color:red;"></i></div>
+                        <div class="flex items-center" v-if="!voucher">
                             <svg width="30px" height="30px" viewBox="-3 0 32 32" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <g id="icomoon-ignore">
@@ -345,7 +370,7 @@
 
     const type = ref('regular');
     const phone = ref('');
-    const smc = ref('')
+    const smc = ref('8004564171407012')
     const validSMC = ref('');
 
     const voucher = ref('');
@@ -358,6 +383,10 @@
     const showButtonScroll = ref(true);
 
     const autoDebet = ref(false);
+
+    const showRegularPromo = ref(false);
+    const showRegular = ref(false);
+    const showAutoDebet = ref(false);
 
     const lastShowIndexPromoRegular = ref(-1);
     const lastShowIndexRegular = ref(-1);
@@ -387,8 +416,6 @@
         if (sessionStorage.getItem('smc')) {
             smc.value = sessionStorage.getItem('smc');
             sessionStorage.removeItem('smc');
-
-            checkSMCID()
         }
 
         if (sessionStorage.getItem('type')) {
@@ -422,6 +449,14 @@
         hasVerticalScroll()
         window.addEventListener("scroll", hasVerticalScroll);
 
+        if (route.query.to == 'voucher') {           
+            setTimeout(() => {
+                document.querySelector('#section-voucher').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }, 1000);
+        }
+
     })
 
 
@@ -430,21 +465,12 @@
         if (smc.value.length !== 16) {
             return false;
         }
-        
-        validSMC.value = 'loading';
-        axios.get(config.public.API_URL + 'checksmcid?smcid=' + smc.value, {
-            headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
-            }
-        }).then(response => {
-            if (response.data.success) {
-                validSMC.value = 'yes';
-            } else {
-                validSMC.value = 'no';
-            }
-        }).catch(error => {
-            validSMC.value = 'no';
-        });
+
+        if (type.value == 'regular') {
+            getPacketRegular()
+        } else {
+            getPacketAutoDebet()
+        }
 
     }
 
@@ -470,9 +496,6 @@
 
     function resetHome() {
         phone.value = ''
-        smc.value = ''
-
-        validSMC.value = '';
 
         voucher.value = '';
         disc.value = 0;
@@ -491,11 +514,11 @@
         lastShowIndexAutoDebet.value = -1;
         showLoadMoreAutoDebet.value = false;
 
-        if (type.value == 'regular') {
-            homeReguler()
-        } else {
-            homeAutoDebet()
-        }
+        packetAutoDebet.value = []
+        packetRegular.value = []
+        packetPromoRegular.value = []
+
+        pageStatus.value = 'standby'
 
     }
 
@@ -509,9 +532,6 @@
             if (response.data.success) {
                 pageStatus.value = 'standby';
                 banner.value = response.data.data.banner;
-                packetRegular.value = response.data.data.paket;
-
-                packetPromoRegular.value = response.data.data.paketpromo;
 
                 title.value = response.data.data.pakettitle;
                 subTitle.value = response.data.data.paketsubtitle;
@@ -519,59 +539,65 @@
                 titlePromo.value = response.data.data.paketpromotitle;
                 subTitlePromo.value = response.data.data.paketpromosubtitle;
 
-                for (let i = 0; i < packetRegular.value.length; i++) {
-                    if (packetRegular.value[i].paket.length > 0) {
-                        packetRegular.value[i].pakettype = packetRegular.value[i].paket[0].pakettype
-                        packetRegular.value[i].price = packetRegular.value[i].paket[0].harga
-                        packetRegular.value[i].promo = packetRegular.value[i].paket[0].harganormal
-                    }
 
-                }
+                // packetRegular.value = response.data.data.paket;
 
-                for (let i = 0; i < packetPromoRegular.value.length; i++) {
-                    if (packetPromoRegular.value[i].paket.length > 0) {
-                        packetPromoRegular.value[i].pakettype = packetPromoRegular.value[i].paket[0].pakettype
-                        packetPromoRegular.value[i].price = packetPromoRegular.value[i].paket[0].harga
-                        packetPromoRegular.value[i].promo = packetPromoRegular.value[i].paket[0].harganormal
-                    }
-                }
-
-                if (packetPromoRegular.value.length) {
-                    if (packetPromoRegular.value.length == 1) {
-                        lastShowIndexPromoRegular.value = 0;
-                    } else
-                    if (packetPromoRegular.value.length == 2) {
-                        lastShowIndexPromoRegular.value = 1;
-                    } else if (packetPromoRegular.value.length >= 3) {
-                        lastShowIndexPromoRegular.value = 2
-                    }
-                }
+                // packetPromoRegular.value = response.data.data.paketpromo;
 
 
+                // for (let i = 0; i < packetRegular.value.length; i++) {
+                //     if (packetRegular.value[i].paket.length > 0) {
+                //         packetRegular.value[i].pakettype = packetRegular.value[i].paket[0].pakettype
+                //         packetRegular.value[i].price = packetRegular.value[i].paket[0].harga
+                //         packetRegular.value[i].promo = packetRegular.value[i].paket[0].harganormal
+                //     }
 
-                if (packetPromoRegular.value.length > 0 && packetRegular.value.length > 0) {
-                    if (packetPromoRegular.value.length == 1) {
-                        lastShowIndexRegular.value = 1
-                    } else if (packetPromoRegular.value.length == 2) {
-                        lastShowIndexRegular.value = 0
-                    }
-                } else {
-                    if (packetRegular.value.length >= 3) {
-                        lastShowIndexRegular.value = 2
-                    } else {
-                        lastShowIndexRegular.value = packetRegular.value.length - 1;
-                    }
+                // }
 
-                }
+                // for (let i = 0; i < packetPromoRegular.value.length; i++) {
+                //     if (packetPromoRegular.value[i].paket.length > 0) {
+                //         packetPromoRegular.value[i].pakettype = packetPromoRegular.value[i].paket[0].pakettype
+                //         packetPromoRegular.value[i].price = packetPromoRegular.value[i].paket[0].harga
+                //         packetPromoRegular.value[i].promo = packetPromoRegular.value[i].paket[0].harganormal
+                //     }
+                // }
 
-                if ((packetPromoRegular.value.length + packetRegular.value.length) >= 3) {
-                    if (packetPromoRegular.value.length >= 3) {
-                        showLoadMoreRegular.value = 'promo-regular'
-                    } else {
-                        showLoadMoreRegular.value = 'regular'
-                    }
+                // if (packetPromoRegular.value.length) {
+                //     if (packetPromoRegular.value.length == 1) {
+                //         lastShowIndexPromoRegular.value = 0;
+                //     } else
+                //     if (packetPromoRegular.value.length == 2) {
+                //         lastShowIndexPromoRegular.value = 1;
+                //     } else if (packetPromoRegular.value.length >= 3) {
+                //         lastShowIndexPromoRegular.value = 2
+                //     }
+                // }
 
-                }
+
+
+                // if (packetPromoRegular.value.length > 0 && packetRegular.value.length > 0) {
+                //     if (packetPromoRegular.value.length == 1) {
+                //         lastShowIndexRegular.value = 1
+                //     } else if (packetPromoRegular.value.length == 2) {
+                //         lastShowIndexRegular.value = 0
+                //     }
+                // } else {
+                //     if (packetRegular.value.length >= 3) {
+                //         lastShowIndexRegular.value = 2
+                //     } else {
+                //         lastShowIndexRegular.value = packetRegular.value.length - 1;
+                //     }
+
+                // }
+
+                // if ((packetPromoRegular.value.length + packetRegular.value.length) >= 3) {
+                //     if (packetPromoRegular.value.length >= 3) {
+                //         showLoadMoreRegular.value = 'promo-regular'
+                //     } else {
+                //         showLoadMoreRegular.value = 'regular'
+                //     }
+
+                // }
                 if (smc.value && type.value == 'regular') {
                     getPacketRegular()
                 }
@@ -608,24 +634,25 @@
             if (response.data.success) {
                 pageStatus.value = 'standby';
                 banner.value = response.data.data.banner;
-                packetAutoDebet.value = response.data.data.paket;
 
                 title.value = response.data.data.pakettitle;
                 subTitle.value = response.data.data.paketsubtitle;
 
-                if (packetAutoDebet.value.length) {
-                    if (packetAutoDebet.value.length == 1) {
-                        lastShowIndexAutoDebet.value = 0;
-                    } else if (packetAutoDebet.value.length == 2) {
-                        lastShowIndexAutoDebet.value = 1;
-                    } else if (packetAutoDebet.value.length >= 3) {
-                        lastShowIndexAutoDebet.value = 2
-                    }
-                }
+                // packetAutoDebet.value = response.data.data.paket;
 
-                if (packetAutoDebet.value.length >= 3) {
-                    showLoadMoreAutoDebet.value = true;
-                }
+                // if (packetAutoDebet.value.length) {
+                //     if (packetAutoDebet.value.length == 1) {
+                //         lastShowIndexAutoDebet.value = 0;
+                //     } else if (packetAutoDebet.value.length == 2) {
+                //         lastShowIndexAutoDebet.value = 1;
+                //     } else if (packetAutoDebet.value.length >= 3) {
+                //         lastShowIndexAutoDebet.value = 2
+                //     }
+                // }
+
+                // if (packetAutoDebet.value.length >= 3) {
+                //     showLoadMoreAutoDebet.value = true;
+                // }
 
                 if (smc.value && type.value == 'auto') {
                     getPacketAutoDebet()
@@ -684,6 +711,8 @@
         choosePacket.value = ''
         pricePacket.value = 0
         canChoosePacket.value = false;
+
+        validSMC.value = 'loading';
 
         axios.get(config.public.API_URL + 'paketregular?smcid=' + smc.value, {
             headers: {
@@ -788,7 +817,10 @@
                     viewMoreRegular()
                 }
                 canChoosePacket.value = true;
+
+                validSMC.value = 'yes';
             } else {
+                validSMC.value = 'no';
                 resetHome();
                 $toast.open({
                     message: response.data.message,
@@ -798,6 +830,7 @@
                 });
             }
         }).catch(error => {
+            resetHome();
             $toast.open({
                 message: 'Terjadi kesalahan sistem',
                 type: 'error',
@@ -805,6 +838,8 @@
                 duration: 2000
 
             });
+
+            validSMC.value = 'no';
         });
     }
 
@@ -820,6 +855,7 @@
         pricePacket.value = 0
         canChoosePacket.value = false;
 
+        validSMC.value = 'loading';
         axios.get(config.public.API_URL + 'paketautodebet?smcid=' + smc.value + '&hpno=' + phone.value, {
             headers: {
                 'NEX-APIKEY': 'apikey-1234567890'
@@ -866,7 +902,10 @@
                     viewMoreAutoDebet()
                 }
                 canChoosePacket.value = true;
+
+                validSMC.value = 'yes';
             } else {
+                validSMC.value = 'no';
                 resetHome();
                 $toast.open({
                     message: response.data.message,
@@ -876,7 +915,8 @@
                 });
             }
         }).catch(error => {
-            console.log(error)
+            validSMC.value = 'no';
+            resetHome();
             $toast.open({
                 message: 'Terjadi kesalahan sistem',
                 type: 'error',
@@ -1187,8 +1227,11 @@
     }
 
     const checkDigit = (event) => {
-        if (event.key.length === 1 && isNaN(Number(event.key))) {
+        if (event.key.length === 1 && isNaN(Number(event.key)) || (!isNaN(Number(event.key)) && event.target.value
+                .toString().length == 16)) {
             event.preventDefault();
         }
+
+
     };
 </script>
