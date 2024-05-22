@@ -49,9 +49,9 @@
                         <button type="button"
                             @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
                             :class="type == 'regular' ? 'active' : ''" class="option-type mt-3 mr-3">Reguler</button>
-                        <button type="button"
+                        <!-- <button type="button"
                             @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
-                            :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button>
+                            :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button> -->
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
