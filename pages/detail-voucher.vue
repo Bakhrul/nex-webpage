@@ -116,11 +116,9 @@
                 sessionStorage.setItem('disc', response.data.data.promoval);
                 sessionStorage.setItem('voucher', response.data.data.vouchercode);
 
+                sessionStorage.setItem('to', 'voucher');
                 router.push({
                     path: '/',
-                    query: {
-                        to: 'voucher'
-                    }
                 })
             } else {
                 $toast.open({
@@ -145,11 +143,9 @@
         sessionStorage.removeItem('disc');
         sessionStorage.removeItem('voucher');
 
+        sessionStorage.setItem('to', 'voucher');
         router.push({
             path: '/',
-            query: {
-                to: 'voucher'
-            }
         })
     }
 </script>

@@ -55,7 +55,7 @@
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
-                        <input type="number" @keydown="checkDigit" @input="phone = $event.target.value.toString()"
+                        <input type="number" @keypress="checkDigit" @input="phone = $event.target.value.toString()"
                             class="w-full p-3 border-gray-300 rounded-xl border" :value="phone"
                             placeholder="Masukan No Handphone Awal 0" />
                         <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Mohon input nomor HP yang
@@ -67,7 +67,7 @@
                     <div class="mt-3">
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <div class="relative w-full">
-                            <input type="number" @keydown="checkDigit($event)" maxlength="16"
+                            <input type="number" @keypress="checkDigit($event)" maxlength="16"
                                 @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0, 16); autoDebet = false; validSMC = false; showRegular = false; showRegularPromo = false; showAutoDebet = false; checkSMCID()"
                                 class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                                 placeholder="Masukan No SMC ID" />
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Masukan nomor SMC ID diatas
-                            dan tekan proses jika ingin memilih paket langganan di bawah ini</div>
+                            jika ingin memilih paket langganan di bawah ini</div>
                     </div>
                     <!-- <button type="button"
                         :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load' || validSMC != 'yes'"
@@ -278,8 +278,8 @@
                             <div class="pl-3 text-sm" :class="voucher ? 'text-black' : 'text-black'">
                                 {{ voucher ? '1 Voucher digunakan' : 'Makin hemat pakai promo' }}</div>
                         </div>
-                        <div class="" v-if="voucher" @click.stop="voucher = ''; disc = 0"><i class="bi bi-x-circle text-2xl"
-                                style="color:red;"></i></div>
+                        <div class="" v-if="voucher" @click.stop="voucher = ''; disc = 0"><i
+                                class="bi bi-x-circle text-2xl" style="color:red;"></i></div>
                         <div class="flex items-center" v-if="!voucher">
                             <svg width="30px" height="30px" viewBox="-3 0 32 32" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -449,12 +449,15 @@
         hasVerticalScroll()
         window.addEventListener("scroll", hasVerticalScroll);
 
-        if (route.query.to == 'voucher') {           
-            setTimeout(() => {
-                document.querySelector('#section-voucher').scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }, 1000);
+        if (sessionStorage.getItem('to') == 'voucher') {
+            if (type.value == 'regular') {
+                sessionStorage.removeItem('to');
+                setTimeout(() => {
+                    document.querySelector('#section-voucher').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }, 1000);
+            }
         }
 
     })
@@ -818,6 +821,8 @@
                 }
                 canChoosePacket.value = true;
 
+                showRegularPromo.value = true;
+                showRegular.value = true;
                 validSMC.value = 'yes';
             } else {
                 validSMC.value = 'no';
@@ -902,7 +907,7 @@
                     viewMoreAutoDebet()
                 }
                 canChoosePacket.value = true;
-
+                showAutoDebet.value = true;
                 validSMC.value = 'yes';
             } else {
                 validSMC.value = 'no';
