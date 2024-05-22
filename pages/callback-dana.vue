@@ -58,7 +58,9 @@
         let data = {
             trxid: route.query.trxid,
         }
-        axios.post(config.public.API_URL + 'paymentautodebet/danapayment', data, {
+
+        let formData = JSON.stringify(data)
+        axios.post(config.public.API_URL + 'paymentautodebet/danapayment', formData, {
             headers: {
                 'NEX-APIKEY': 'apikey-1234567890'
             }

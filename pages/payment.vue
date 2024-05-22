@@ -246,7 +246,9 @@
         }
 
         pageStatus.value = 'payment-load';
-        axios.post(`${config.public.API_URL}${urlX}`, data, {
+
+        let formData = JSON.stringify(data)
+        axios.post(`${config.public.API_URL}${urlX}`, formData, {
             headers: {
                 'NEX-APIKEY': 'apikey-1234567890'
             },

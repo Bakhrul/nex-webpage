@@ -134,7 +134,9 @@
             vouchercode: route.query.voucher,
             email: email.value
         }
-        axios.post(config.public.API_URL + 'paymentautodebet/brilink', data, {
+
+        let formData = JSON.stringify(data)
+        axios.post(config.public.API_URL + 'paymentautodebet/brilink', formData, {
             headers: {
                 'NEX-APIKEY': 'apikey-1234567890'
             }
