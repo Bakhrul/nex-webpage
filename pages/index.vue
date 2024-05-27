@@ -38,13 +38,22 @@
                 </div>
                 <div class="w-full" v-show="pageStatus != 'home-load'">
                     <div class="banner">
-                        <img @click="redirectPromo(context.id)" v-for="context in banner" :src="context.bannerurl"
-                            class="w-full">
+                        <carousel :items-to-show="1" :autoplay="2500" :wrapAround="true">
+                            <slide v-for="slide in banner" :key="slide">
+                                <img @click="redirectPromo(slide.id)" :src="slide.bannerurl" class="w-full">
+                            </slide>
+
+                            <template #addons>
+                                
+                                <pagination />
+                            </template>
+                        </carousel>
+
                     </div>
                 </div>
+                <img src="~/assets/bg-header.jpg" class="mt-5" style="width:100%" />
                 <div class="p-3 border-b border-gray-200">
-                    <div class="text-lg font-bold">Paket Langganan</div>
-                    <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
+
                     <div class="flex items-center">
                         <button type="button"
                             @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
@@ -94,14 +103,15 @@
                         @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button> -->
                 </div>
-                <div v-if="pageStatus == 'packet-load' || pageStatus == 'home-load'" class="flex justify-center mt-5">
+                <div v-if="pageStatus == 'home-load'" class="flex justify-center mt-5">
                     <div class="loader"></div>
                 </div>
-                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'regular'">
+                <div class="p-3 border-b border-gray-200 relative" :class="showRegularPromo ? 'pb-10' : ''"
+                    v-if="type == 'regular'">
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="text-lg font-bold">{{ titlePromo }}</div>
-                            <div class="text-gray-600 mb-3">{{ subTitlePromo }}</div>
+                            <div class="text-gray-600">{{ subTitlePromo }}</div>
                         </div>
                         <div v-if="titlePromo"> <button type="button" class="bg-white shadow-2xl border border-red"
                                 style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
@@ -111,9 +121,9 @@
                     <template v-for="(context, index) in packetPromoRegular" v-if="showRegularPromo">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
                             v-if="index <= lastShowIndexPromoRegular">
-                            <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
+                            <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;object-fit: cover;object-position:center;">
                             </div>
                             <div class="px-3 py-2">
                                 <div class="justify-between flex items-center mb-1">
@@ -154,11 +164,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'regular'">
+                <div class="p-3 border-b border-gray-200 relative" :class="showRegular ? 'pb-10' : ''"
+                    v-if="type == 'regular'">
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="text-lg font-bold">{{ title }}</div>
-                            <div class="text-gray-600 mb-3">{{ subTitle }}</div>
+                            <div class="text-gray-600">{{ subTitle }}</div>
                         </div>
                         <div v-if="title"> <button type="button" class="bg-white shadow-2xl border border-red"
                                 style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
@@ -168,9 +179,9 @@
                     <template v-for="(context, index) in packetRegular" v-if="showRegular">
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
                             v-if="index <= lastShowIndexRegular">
-                            <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
+                            <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;object-fit: cover;object-position:center;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-1">
@@ -212,11 +223,12 @@
                     </div>
                 </div>
 
-                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'auto'">
+                <div class="p-3 border-b border-gray-200 relative" :class="showAutoDebet ? 'pb-10' : ''"
+                    v-if="type == 'auto'">
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="text-lg font-bold">{{ title }}</div>
-                            <div class="text-gray-600 mb-3">{{ subTitle }}</div>
+                            <div class="text-gray-600">{{ subTitle }}</div>
                         </div>
                         <div v-if="title"> <button type="button" class="bg-white shadow-2xl border border-red"
                                 style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
@@ -227,7 +239,7 @@
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;object-fit: cover;object-position:center;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-1">
@@ -340,11 +352,13 @@
 </template>
 <script setup>
     import axios from "axios";
+    
 
     import {
         useToast
     } from 'vue-toast-notification';
     import 'vue-toast-notification/dist/theme-sugar.css';
+
 
     const config = useRuntimeConfig()
 
@@ -689,7 +703,10 @@
             items: 1,
             loop: true,
             margin: 0,
-            autoPlay: 1500,
+            dots: true,
+            pagination: true,
+            nav: true,
+            autoPlay: 2500,
         });
     }
 

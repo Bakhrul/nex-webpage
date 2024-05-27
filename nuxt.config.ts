@@ -35,6 +35,9 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/main.css'],
+  modules: [
+    'vue3-carousel-nuxt'
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},

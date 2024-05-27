@@ -45,7 +45,7 @@
 
         let urlX = '';
         if(route.query.type){
-            urlX = config.public.API_URL + 'paketdetailregular?id=' + route.query.id + '&type=' + route.query.type;
+            urlX = config.public.API_URL + 'paketdetailregular?nama=' + route.query.id + '&type=' + route.query.type;
         }else{
             urlX = config.public.API_URL + 'paketdetailautodebet?id=' + route.query.id;
         }
