@@ -53,7 +53,7 @@
                 </div>                
                 <div class="p-3 border-b border-gray-200">
                     <div class="text-lg font-bold">Paket Langganan</div>
-                            <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
+                            <div class="text-gray-600">Pilih di bawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
                             @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
