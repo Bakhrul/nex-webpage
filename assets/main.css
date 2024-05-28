@@ -210,12 +210,24 @@ input[type=number] {
 
   .option-type{
     border: 1px gray solid;
-    padding: 3px 7px;
-    font-size: 11px;
+    padding: 5px 7px;
+    font-size: 13px;
     border-radius: 10px;
   }
 
   .option-type.active{
+    border:1px var(--primary) solid !important;
+    background: #cdddf6;
+    color: black
+  }
+
+  .option-type2{
+    border: 1px gray solid;
+    padding: 5px 15px;  
+    border-radius: 10px;  
+  }
+
+  .option-type2.active{
     border:1px var(--primary) solid !important;
     background: #cdddf6;
     color: black

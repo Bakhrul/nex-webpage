@@ -57,10 +57,10 @@
                     <div class="flex items-center">
                         <button type="button"
                             @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
-                            :class="type == 'regular' ? 'active' : ''" class="option-type mt-3 mr-3">Reguler</button>
+                            :class="type == 'regular' ? 'active' : ''" class="option-type2 mt-3 mr-3">Reguler</button>
                         <!-- <button type="button"
                             @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
-                            :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button> -->
+                            :class="type == 'auto' ? 'active' : ''" class="option-type2 mt-3">Auto Debet</button> -->
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
@@ -119,7 +119,7 @@
                                     :class="showRegularPromo ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
                     </div>
                     <template v-for="(context, index) in packetPromoRegular" v-if="showRegularPromo">
-                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
+                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px"
                             v-if="index <= lastShowIndexPromoRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
@@ -177,7 +177,7 @@
                                     :class="showRegular ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
                     </div>
                     <template v-for="(context, index) in packetRegular" v-if="showRegular">
-                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
+                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px"
                             v-if="index <= lastShowIndexRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
@@ -236,7 +236,7 @@
                                     :class="showAutoDebet ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
                     </div>
                     <template v-for="(context, index) in packetAutoDebet" v-if="showAutoDebet">
-                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px">
+                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
                                     style="height:100px;object-fit: cover;object-position:center;">
