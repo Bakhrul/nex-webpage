@@ -50,10 +50,10 @@
                         </carousel>
 
                     </div>
-                </div>
-                <img src="~/assets/bg-header.jpg" class="mt-5" style="width:100%" />
+                </div>                
                 <div class="p-3 border-b border-gray-200">
-
+                    <div class="text-lg font-bold">Paket Langganan</div>
+                            <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
                             @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
@@ -67,7 +67,7 @@
                         <input type="number" @keypress="checkDigit" @input="phone = $event.target.value.toString()"
                             class="w-full p-3 border-gray-300 rounded-xl border" :value="phone"
                             placeholder="Masukan No Handphone Awal 0" />
-                        <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Mohon input nomor HP yang
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Mohon input nomor HP yang
                             dapat dihubungi supaya
                             dapat
                             kami
@@ -95,7 +95,7 @@
                                 <div class="loader-small"></div>
                             </div>
                         </div>
-                        <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Masukan nomor SMC ID diatas
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan nomor SMC ID diatas
                             jika ingin memilih paket langganan di bawah ini</div>
                     </div>
                     <!-- <button type="button"
@@ -108,7 +108,7 @@
                 </div>
                 <div class="p-3 border-b border-gray-200 relative" :class="showRegularPromo ? 'pb-10' : ''"
                     v-if="type == 'regular'">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center" :class="showRegularPromo ? 'mb-5' : ''">
                         <div>
                             <div class="text-lg font-bold">{{ titlePromo }}</div>
                             <div class="text-gray-600">{{ subTitlePromo }}</div>
@@ -146,10 +146,10 @@
                                         </template>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid ? 'active' : ''}`"
-                                        @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>
+                                        @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>                                      
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                 </div>
                 <div class="p-3 border-b border-gray-200 relative" :class="showRegular ? 'pb-10' : ''"
                     v-if="type == 'regular'">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center" :class="showRegular ? 'mb-5' : ''">
                         <div>
                             <div class="text-lg font-bold">{{ title }}</div>
                             <div class="text-gray-600">{{ subTitle }}</div>
@@ -204,7 +204,7 @@
                                         </template>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid ? 'active' : ''}`"
                                         @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, false, index)">{{child.masaaktif}}</button>
@@ -225,7 +225,7 @@
 
                 <div class="p-3 border-b border-gray-200 relative" :class="showAutoDebet ? 'pb-10' : ''"
                     v-if="type == 'auto'">
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center" :class="showAutoDebet ? 'mb-5' : ''">
                         <div>
                             <div class="text-lg font-bold">{{ title }}</div>
                             <div class="text-gray-600">{{ subTitle }}</div>
@@ -262,7 +262,7 @@
                                         </template>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == context.id ? 'active' : ''}`"
                                         @click="changeChoose(context.id, context.harga, context.harganormal)">30
@@ -617,10 +617,7 @@
                 // }
                 if (smc.value && type.value == 'regular') {
                     getPacketRegular()
-                }
-                setTimeout(() => {
-                    initSlider()
-                }, 1);
+                }             
 
             } else {
                 $toast.open({
@@ -675,10 +672,6 @@
                     getPacketAutoDebet()
                 }
 
-
-                setTimeout(() => {
-                    initSlider()
-                }, 1);
             } else {
                 $toast.open({
                     message: response.data.message,
@@ -697,18 +690,7 @@
             });
         });
     }
-
-    function initSlider() {
-        $('.banner').owlCarousel({
-            items: 1,
-            loop: true,
-            margin: 0,
-            dots: true,
-            pagination: true,
-            nav: true,
-            autoPlay: 2500,
-        });
-    }
+    
 
     function processPacket() {
         if (type.value == 'regular') {
