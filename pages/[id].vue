@@ -38,27 +38,36 @@
                 </div>
                 <div class="w-full" v-show="pageStatus != 'home-load'">
                     <div class="banner">
-                        <img @click="redirectPromo(context.id)" v-for="context in banner" :src="context.bannerurl"
-                            class="w-full">
+                        <carousel :items-to-show="1" :autoplay="2500" :wrapAround="true">
+                            <slide v-for="slide in banner" :key="slide">
+                                <img @click="redirectPromo(slide.id)" :src="slide.bannerurl" class="w-full">
+                            </slide>
+
+                            <template #addons>
+                                
+                                <pagination />
+                            </template>
+                        </carousel>
+
                     </div>
-                </div>
+                </div>                
                 <div class="p-3 border-b border-gray-200">
                     <div class="text-lg font-bold">Paket Langganan</div>
-                    <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
+                            <div class="text-gray-600">Pilih dibawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
                             @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
-                            :class="type == 'regular' ? 'active' : ''" class="option-type mt-3 mr-3">Reguler</button>
+                            :class="type == 'regular' ? 'active' : ''" class="option-type2 mt-3 mr-3">Reguler</button>
                         <!-- <button type="button"
                             @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
-                            :class="type == 'auto' ? 'active' : ''" class="option-type mt-3">Auto Debet</button> -->
+                            :class="type == 'auto' ? 'active' : ''" class="option-type2 mt-3">Auto Debet</button> -->
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
                         <div class="font-semibold mb-2">No. Handphone</div>
                         <input type="number" @keypress="checkDigit" @input="phone = $event.target.value.toString()"
                             class="w-full p-3 border-gray-300 rounded-xl border" :value="phone"
                             placeholder="Masukan No Handphone Awal 0" />
-                        <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Mohon input nomor HP yang
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Mohon input nomor HP yang
                             dapat dihubungi supaya
                             dapat
                             kami
@@ -86,22 +95,23 @@
                                 <div class="loader-small"></div>
                             </div>
                         </div>
-                        <div class="text-xs text-gray-600 pt-1" style="font-style:italic">Masukan nomor SMC ID diatas
-                            jika ingin memilih paket langganan di bawah ini</div>
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan nomor SMC ID di atas
+                            jika ingin memilih paket langganan<br> di bawah ini</div>
                     </div>
                     <!-- <button type="button"
                         :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load' || validSMC != 'yes'"
                         @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
                         class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button> -->
                 </div>
-                <div v-if="pageStatus == 'packet-load' || pageStatus == 'home-load'" class="flex justify-center mt-5">
+                <div v-if="pageStatus == 'home-load'" class="flex justify-center mt-5">
                     <div class="loader"></div>
                 </div>
-                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'regular'">
-                    <div class="flex justify-between items-center">
+                <div class="p-3 border-b border-gray-200 relative" :class="showRegularPromo ? 'pb-10' : ''"
+                    v-if="type == 'regular'">
+                    <div class="flex justify-between items-center" :class="showRegularPromo ? 'mb-5' : ''">
                         <div>
                             <div class="text-lg font-bold">{{ titlePromo }}</div>
-                            <div class="text-gray-600 mb-3">{{ subTitlePromo }}</div>
+                            <div class="text-gray-600">{{ subTitlePromo }}</div>
                         </div>
                         <div v-if="titlePromo"> <button type="button" class="bg-white shadow-2xl border border-red"
                                 style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
@@ -109,11 +119,11 @@
                                     :class="showRegularPromo ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
                     </div>
                     <template v-for="(context, index) in packetPromoRegular" v-if="showRegularPromo">
-                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
+                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px"
                             v-if="index <= lastShowIndexPromoRegular">
-                            <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
+                            <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;object-fit: cover;object-position:center;">
                             </div>
                             <div class="px-3 py-2">
                                 <div class="justify-between flex items-center mb-1">
@@ -136,10 +146,10 @@
                                         </template>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid ? 'active' : ''}`"
-                                        @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>
+                                        @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>                                      
                                 </div>
                             </div>
                         </div>
@@ -154,11 +164,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'regular'">
-                    <div class="flex justify-between items-center">
+                <div class="p-3 border-b border-gray-200 relative" :class="showRegular ? 'pb-10' : ''"
+                    v-if="type == 'regular'">
+                    <div class="flex justify-between items-center" :class="showRegular ? 'mb-5' : ''">
                         <div>
                             <div class="text-lg font-bold">{{ title }}</div>
-                            <div class="text-gray-600 mb-3">{{ subTitle }}</div>
+                            <div class="text-gray-600">{{ subTitle }}</div>
                         </div>
                         <div v-if="title"> <button type="button" class="bg-white shadow-2xl border border-red"
                                 style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
@@ -166,11 +177,11 @@
                                     :class="showRegular ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
                     </div>
                     <template v-for="(context, index) in packetRegular" v-if="showRegular">
-                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px"
+                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px"
                             v-if="index <= lastShowIndexRegular">
-                            <div style="cursor:pointer;" @click="redirectPacket(context.groupid, context.pakettype)">
+                            <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;object-fit: cover;object-position:center;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-1">
@@ -193,7 +204,7 @@
                                         </template>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid ? 'active' : ''}`"
                                         @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, false, index)">{{child.masaaktif}}</button>
@@ -212,11 +223,12 @@
                     </div>
                 </div>
 
-                <div class="p-3 pb-10 border-b border-gray-200 relative" v-if="type == 'auto'">
-                    <div class="flex justify-between items-center">
+                <div class="p-3 border-b border-gray-200 relative" :class="showAutoDebet ? 'pb-10' : ''"
+                    v-if="type == 'auto'">
+                    <div class="flex justify-between items-center" :class="showAutoDebet ? 'mb-5' : ''">
                         <div>
                             <div class="text-lg font-bold">{{ title }}</div>
-                            <div class="text-gray-600 mb-3">{{ subTitle }}</div>
+                            <div class="text-gray-600">{{ subTitle }}</div>
                         </div>
                         <div v-if="title"> <button type="button" class="bg-white shadow-2xl border border-red"
                                 style="border-radius:100px;width:24px;height:24px;font-size:16px;border:1px black solid !important;color:black !important"
@@ -224,10 +236,10 @@
                                     :class="showAutoDebet ? 'bi-chevron-up' : 'bi-chevron-down'"></i></button></div>
                     </div>
                     <template v-for="(context, index) in packetAutoDebet" v-if="showAutoDebet">
-                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="height:200px">
+                        <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="filter:blur(1px);height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;object-fit: cover;object-position:center;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-1">
@@ -250,7 +262,7 @@
                                         </template>
                                     </div>
                                 </div>
-                                <div class="flex items-center">
+                                <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == context.id ? 'active' : ''}`"
                                         @click="changeChoose(context.id, context.harga, context.harganormal)">30
@@ -340,11 +352,13 @@
 </template>
 <script setup>
     import axios from "axios";
+    
 
     import {
         useToast
     } from 'vue-toast-notification';
     import 'vue-toast-notification/dist/theme-sugar.css';
+
 
     const config = useRuntimeConfig()
 
@@ -603,10 +617,7 @@
                 // }
                 if (smc.value && type.value == 'regular') {
                     getPacketRegular()
-                }
-                setTimeout(() => {
-                    initSlider()
-                }, 1);
+                }             
 
             } else {
                 $toast.open({
@@ -661,10 +672,6 @@
                     getPacketAutoDebet()
                 }
 
-
-                setTimeout(() => {
-                    initSlider()
-                }, 1);
             } else {
                 $toast.open({
                     message: response.data.message,
@@ -683,15 +690,7 @@
             });
         });
     }
-
-    function initSlider() {
-        $('.banner').owlCarousel({
-            items: 1,
-            loop: true,
-            margin: 0,
-            autoPlay: 1500,
-        });
-    }
+    
 
     function processPacket() {
         if (type.value == 'regular') {

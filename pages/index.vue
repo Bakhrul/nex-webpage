@@ -95,8 +95,8 @@
                                 <div class="loader-small"></div>
                             </div>
                         </div>
-                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan nomor SMC ID diatas
-                            jika ingin memilih paket langganan di bawah ini</div>
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan nomor SMC ID di atas
+                            jika ingin memilih paket langganan<br> di bawah ini</div>
                     </div>
                     <!-- <button type="button"
                         :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load' || validSMC != 'yes'"
