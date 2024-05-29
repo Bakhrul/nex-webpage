@@ -201,7 +201,8 @@
             vouchercode: route.query.voucher,
             paymentid: payment.value,
             referalcode: route.query.refcode,
-            hpno: route.query.phone
+            hpno: route.query.phone,
+            pakettype: route.query.typePacket
         }
         if (type == 'regular') {
             if (payment.value == 'DANA') {
@@ -215,7 +216,7 @@
                 urlX = 'paymentregular/shopeepayment'
             } else if (payment.value == 'CARD') {
                 urlX = 'paymentregular/ccpayment'
-            } else if (['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(payment.value)) {
+            } else if (['PERMATA', 'MANDIRI', 'BNI', 'BRI', 'BCA'].includes(payment.value)) {
                 urlX = 'paymentregular/vapayment'
             } else {
                 return false;
@@ -272,7 +273,7 @@
                         location.replace(response.data.data.paymenturl)
                     } else if (payment.value == 'CARD') {
                         location.replace(response.data.data.paymenturl)
-                    } else if (['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(payment.value)) {
+                    } else if (['PERMATA', 'MANDIRI', 'BNI', 'BRI', 'BCA'].includes(payment.value)) {
                         urlX = 'paymentregular/vapayment'
                         localStorage.setItem('amount', response.data.data.amount)
                         localStorage.setItem('bataswaktu', response.data.data.bataswaktu)

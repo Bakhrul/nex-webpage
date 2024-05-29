@@ -56,10 +56,10 @@
                             <div class="text-gray-600">Pilih di bawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
-                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
+                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
                             :class="type == 'regular' ? 'active' : ''" class="option-type2 mt-3 mr-3">Reguler</button>
                         <!-- <button type="button"
-                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
+                            @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
                             :class="type == 'auto' ? 'active' : ''" class="option-type2 mt-3">Auto Debet</button> -->
                     </div>
                     <div class="mt-3" v-if="type == 'auto'">
@@ -77,7 +77,7 @@
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <div class="relative w-full">
                             <input type="number" @keypress="checkDigit($event)" maxlength="16"
-                                @input="canChoosePacket = false;choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0, 16); autoDebet = false; validSMC = false; showRegular = false; showRegularPromo = false; showAutoDebet = false; checkSMCID()"
+                                @input="canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0, 16); autoDebet = false; validSMC = false; showRegular = false; showRegularPromo = false; showAutoDebet = false; checkSMCID()"
                                 class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                                 placeholder="Masukan No SMC ID" />
                             <div v-if="validSMC == 'yes'"
@@ -97,11 +97,7 @@
                         </div>
                         <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan nomor SMC ID di atas
                             jika ingin memilih paket langganan<br> di bawah ini</div>
-                    </div>
-                    <!-- <button type="button"
-                        :disabled="checkDisabledProcess() || canChoosePacket || pageStatus == 'packet-load' || pageStatus == 'home-load' || validSMC != 'yes'"
-                        @click="canChoosePacket = false; choosePacket = ''; pricePacket = 0; processPacket()"
-                        class="text-white mb-5 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Proses</button> -->
+                    </div>                  
                 </div>
                 <div v-if="pageStatus == 'home-load'" class="flex justify-center mt-5">
                     <div class="loader"></div>
@@ -148,7 +144,7 @@
                                 </div>
                                 <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
-                                        :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid ? 'active' : ''}`"
+                                        :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid && typePacket == child.pakettype ? 'active' : ''}`"
                                         @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>                                      
                                 </div>
                             </div>
@@ -206,7 +202,7 @@
                                 </div>
                                 <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
-                                        :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid ? 'active' : ''}`"
+                                        :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid && typePacket == child.pakettype ? 'active' : ''}`"
                                         @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, false, index)">{{child.masaaktif}}</button>
                                 </div>
                             </div>
@@ -392,6 +388,8 @@
 
     const choosePacket = ref('');
     const pricePacket = ref(0);
+    const typePacket = ref('');
+
     const canChoosePacket = ref(false)
 
     const showButtonScroll = ref(true);
@@ -518,6 +516,7 @@
         disc.value = 0;
 
         choosePacket.value = '';
+        typePacket.value = '';
         pricePacket.value = 0;
         canChoosePacket.value = false;
 
@@ -537,6 +536,8 @@
 
         pageStatus.value = 'standby'
 
+        sessionStorage.clear()
+
     }
 
     function homeReguler() {
@@ -555,66 +556,6 @@
 
                 titlePromo.value = response.data.data.paketpromotitle;
                 subTitlePromo.value = response.data.data.paketpromosubtitle;
-
-
-                // packetRegular.value = response.data.data.paket;
-
-                // packetPromoRegular.value = response.data.data.paketpromo;
-
-
-                // for (let i = 0; i < packetRegular.value.length; i++) {
-                //     if (packetRegular.value[i].paket.length > 0) {
-                //         packetRegular.value[i].pakettype = packetRegular.value[i].paket[0].pakettype
-                //         packetRegular.value[i].price = packetRegular.value[i].paket[0].harga
-                //         packetRegular.value[i].promo = packetRegular.value[i].paket[0].harganormal
-                //     }
-
-                // }
-
-                // for (let i = 0; i < packetPromoRegular.value.length; i++) {
-                //     if (packetPromoRegular.value[i].paket.length > 0) {
-                //         packetPromoRegular.value[i].pakettype = packetPromoRegular.value[i].paket[0].pakettype
-                //         packetPromoRegular.value[i].price = packetPromoRegular.value[i].paket[0].harga
-                //         packetPromoRegular.value[i].promo = packetPromoRegular.value[i].paket[0].harganormal
-                //     }
-                // }
-
-                // if (packetPromoRegular.value.length) {
-                //     if (packetPromoRegular.value.length == 1) {
-                //         lastShowIndexPromoRegular.value = 0;
-                //     } else
-                //     if (packetPromoRegular.value.length == 2) {
-                //         lastShowIndexPromoRegular.value = 1;
-                //     } else if (packetPromoRegular.value.length >= 3) {
-                //         lastShowIndexPromoRegular.value = 2
-                //     }
-                // }
-
-
-
-                // if (packetPromoRegular.value.length > 0 && packetRegular.value.length > 0) {
-                //     if (packetPromoRegular.value.length == 1) {
-                //         lastShowIndexRegular.value = 1
-                //     } else if (packetPromoRegular.value.length == 2) {
-                //         lastShowIndexRegular.value = 0
-                //     }
-                // } else {
-                //     if (packetRegular.value.length >= 3) {
-                //         lastShowIndexRegular.value = 2
-                //     } else {
-                //         lastShowIndexRegular.value = packetRegular.value.length - 1;
-                //     }
-
-                // }
-
-                // if ((packetPromoRegular.value.length + packetRegular.value.length) >= 3) {
-                //     if (packetPromoRegular.value.length >= 3) {
-                //         showLoadMoreRegular.value = 'promo-regular'
-                //     } else {
-                //         showLoadMoreRegular.value = 'regular'
-                //     }
-
-                // }
                 if (smc.value && type.value == 'regular') {
                     getPacketRegular()
                 }             
@@ -650,23 +591,7 @@
                 banner.value = response.data.data.banner;
 
                 title.value = response.data.data.pakettitle;
-                subTitle.value = response.data.data.paketsubtitle;
-
-                // packetAutoDebet.value = response.data.data.paket;
-
-                // if (packetAutoDebet.value.length) {
-                //     if (packetAutoDebet.value.length == 1) {
-                //         lastShowIndexAutoDebet.value = 0;
-                //     } else if (packetAutoDebet.value.length == 2) {
-                //         lastShowIndexAutoDebet.value = 1;
-                //     } else if (packetAutoDebet.value.length >= 3) {
-                //         lastShowIndexAutoDebet.value = 2
-                //     }
-                // }
-
-                // if (packetAutoDebet.value.length >= 3) {
-                //     showLoadMoreAutoDebet.value = true;
-                // }
+                subTitle.value = response.data.data.paketsubtitle;               
 
                 if (smc.value && type.value == 'auto') {
                     getPacketAutoDebet()
@@ -691,14 +616,6 @@
         });
     }
     
-
-    function processPacket() {
-        if (type.value == 'regular') {
-            getPacketRegular()
-        } else {
-            getPacketAutoDebet()
-        }
-    }
 
     function getPacketRegular() {
 
@@ -733,20 +650,20 @@
                         packetRegular.value[i].price = packetRegular.value[i].paket[0].harga
                         packetRegular.value[i].promo = packetRegular.value[i].paket[0].harganormal
                     }
-
-                    if (sessionStorage.getItem('packet')) {
-                        let check = packetRegular.value[i].paket.findIndex((e) => e.paketid == sessionStorage
-                            .getItem('packet'))
-                        if (check >= 0) {
+      
+                    if (sessionStorage.getItem('packet') && sessionStorage.getItem('typePacket')) {
+                        let check = packetRegular.value[i].paket.findIndex((e) => e.paketid == sessionStorage.getItem('packet') && e.pakettype == sessionStorage.getItem('typePacket'))                    
+                        if (check >= 0) {                            
                             packetRegular.value[i].pakettype = packetRegular.value[i].paket[check].pakettype
                             packetRegular.value[i].price = packetRegular.value[i].paket[check].harga
                             packetRegular.value[i].promo = packetRegular.value[i].paket[check].harganormal
 
                             choosePacket.value = sessionStorage.getItem('packet');
                             pricePacket.value = packetRegular.value[i].paket[check].harga;
+                            
+                            typePacket.value = sessionStorage.getItem('typePacket');                        
 
-                            hasSelectedPacket = true;
-                            sessionStorage.removeItem('packet');
+                            hasSelectedPacket = true;                         
 
                         }
                     }
@@ -760,8 +677,7 @@
                     }
 
                     if (sessionStorage.getItem('packet')) {
-                        let check = packetPromoRegular.value[i].paket.findIndex((e) => e.paketid ==
-                            sessionStorage.getItem('packet'))
+                        let check = packetPromoRegular.value[i].paket.findIndex((e) => e.paketid == sessionStorage.getItem('packet') && e.pakettype == sessionStorage.getItem('typePacket'))
                         if (check >= 0) {
                             packetPromoRegular.value[i].pakettype = packetPromoRegular.value[i].paket[check]
                                 .pakettype
@@ -771,10 +687,11 @@
                                 .harganormal
 
                             choosePacket.value = sessionStorage.getItem('packet');
+                            typePacket.value = sessionStorage.getItem('typePacket');  
+
                             pricePacket.value = packetPromoRegular.value[i].paket[check].harga;
 
-                            hasSelectedPacket = true;
-                            sessionStorage.removeItem('packet');
+                            hasSelectedPacket = true;                          
 
                         }
                     }
@@ -814,6 +731,11 @@
                     }
 
                 }
+
+                setTimeout(() => {
+                    sessionStorage.removeItem('packet');
+                    sessionStorage.removeItem('typePacket')
+                }, 500);                
 
                 if (hasSelectedPacket) {
                     viewMoreRegular()
@@ -874,6 +796,7 @@
                     let check = packetAutoDebet.value.findIndex((e) => e.id == sessionStorage.getItem('packet'))
                     if (check >= 0) {
                         choosePacket.value = sessionStorage.getItem('packet');
+                        typePacket.value = '';
                         if (packetAutoDebet.value[check].promoprice) {
                             pricePacket.value = packetAutoDebet.value[check].promoprice;
                         } else {
@@ -881,7 +804,7 @@
                         }
 
                         hasSelectedPacket = true;
-                        sessionStorage.removeItem('packet');
+                       
 
                     }
 
@@ -905,6 +828,11 @@
                 if (hasSelectedPacket) {
                     viewMoreAutoDebet()
                 }
+
+                setTimeout(() => {
+                    sessionStorage.removeItem('packet');
+                    sessionStorage.removeItem('typePacket')
+                }, 500);                
                 canChoosePacket.value = true;
                 showAutoDebet.value = true;
                 validSMC.value = 'yes';
@@ -931,8 +859,7 @@
         });
     }
 
-    function redirectPacket(id, typePacket) {
-
+    function redirectPacket(id, paketType) {        
         if (!canChoosePacket.value) {
             return false;
         }
@@ -956,13 +883,17 @@
         if (disc.value) {
             sessionStorage.setItem('disc', disc.value);
         }
+        
+        if(typePacket.value){         
+            sessionStorage.setItem('typePacket', typePacket.value);
+        }
 
         sessionStorage.setItem('type', type.value);
         router.push({
             path: '/detail',
             query: {
                 id: id,
-                type: typePacket
+                type: paketType
             }
         })
 
@@ -987,6 +918,10 @@
 
         if (disc.value) {
             sessionStorage.setItem('disc', disc.value);
+        }
+
+        if(typePacket.value){
+            sessionStorage.setItem('typePacket', typePacket.value);
         }
 
         sessionStorage.setItem('type', type.value);
@@ -1016,6 +951,11 @@
         if (disc.value) {
             sessionStorage.setItem('disc', disc.value);
         }
+
+        if(typePacket.value){
+            sessionStorage.setItem('typePacket', typePacket.value);
+        }
+
         sessionStorage.setItem('type', type.value);
 
         router.push({
@@ -1036,6 +976,7 @@
                 packet: choosePacket.value,
                 type: type.value,
                 voucher: voucher.value,
+                typePacket: typePacket.value,
                 refcode: ''
             }
         })
@@ -1044,25 +985,29 @@
     function changeChoose(id, price, promo) {
         if (canChoosePacket.value) {
             choosePacket.value = id;
-
+            typePacket.value = '';
             pricePacket.value = stringToNumber(price)
 
         }
 
     }
 
-    function changeChooseRegular(id, price, promo, type, packetPromo = false, indexPacket) {
+    function changeChooseRegular(id, price, promo, type, packetPromo = false, indexPacket) {  
         if (canChoosePacket.value) {
             choosePacket.value = id;
 
             pricePacket.value = stringToNumber(price)
 
+            typePacket.value = type;
+
         }
+
 
         if (packetPromo) {
             packetPromoRegular.value[indexPacket].pakettype = type;
             packetPromoRegular.value[indexPacket].price = price;
             packetPromoRegular.value[indexPacket].promo = promo;
+            
         } else {
             packetRegular.value[indexPacket].pakettype = type;
             packetRegular.value[indexPacket].price = price;
@@ -1139,6 +1084,10 @@
 
         if (disc.value) {
             sessionStorage.setItem('disc', disc.value);
+        }
+
+        if(typePacket.value){
+            sessionStorage.setItem('typePacket', typePacket.value);
         }
 
         sessionStorage.setItem('type', type.value);
