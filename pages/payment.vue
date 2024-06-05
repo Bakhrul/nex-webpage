@@ -202,6 +202,7 @@
             paymentid: payment.value,
             referalcode: route.query.refcode,
             hpno: route.query.phone,
+            refcode: route.query.refcode,
             pakettype: route.query.typePacket
         }
         if (type == 'regular') {

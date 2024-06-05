@@ -128,6 +128,7 @@
             smcid: route.query.smc,
             hpno: route.query.phone,
             referalcode: route.query.refcode,
+            refcode: route.query.refcode,
             paketid: route.query.packet,
             cardno: cardno.value,
             brihpno: brihpno.value,
@@ -168,6 +169,8 @@
         pageStatus.value = 'payment-load';
         let data = {
             otpcode: otpcode.value,
+            referalcode: route.query.refcode,
+            refcode: route.query.refcode,
             trxid: trxid.value,
         }
         axios.post(config.public.API_URL + 'paymentautodebet/briotp', data, {
