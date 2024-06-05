@@ -1096,7 +1096,8 @@
                 path: '/detail-voucher',
                 query: {
                     id: voucher.value,
-                    flag: 'remove'
+                    flag: 'remove',
+                    refcode: route.params.id
                 }
 
             })
@@ -1105,7 +1106,8 @@
                 path: '/input-promo',
                 query: {
                     smcid: smc.value,
-                    paketid: choosePacket.value
+                    paketid: choosePacket.value,
+                    refcode: route.params.id
                 }
 
             })

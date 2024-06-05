@@ -118,7 +118,7 @@
 
                 sessionStorage.setItem('to', 'voucher');
                 router.push({
-                    path: '/',
+                    path: route.query.refcode ? '/' + route.query.refcode : '/',                  
                 })
             } else {
                 $toast.open({
@@ -145,7 +145,7 @@
 
         sessionStorage.setItem('to', 'voucher');
         router.push({
-            path: '/',
+            path: route.query.refcode ? '/' + route.query.refcode : '/',                  
         })
     }
 </script>
