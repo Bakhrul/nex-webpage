@@ -51,7 +51,7 @@
         }
         axios.get(urlX, {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {

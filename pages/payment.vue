@@ -125,7 +125,7 @@
         }
         axios.get(config.public.API_URL + 'paymentoptautodebet', {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             },
             params
         }).then(response => {
@@ -157,7 +157,7 @@
         }
         axios.get(config.public.API_URL + 'paymentoptregular', {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             },
             params
         }).then(response => {
@@ -252,7 +252,7 @@
         let formData = JSON.stringify(data)
         axios.post(`${config.public.API_URL}${urlX}`, formData, {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             },
         }).then(response => {
             if (response.data.success) {

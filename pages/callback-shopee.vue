@@ -64,7 +64,7 @@
         let formData = JSON.stringify(data)
         axios.post(config.public.API_URL + 'paymentautodebet/shopeepayment', formData, {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {

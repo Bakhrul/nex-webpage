@@ -91,7 +91,7 @@
         }
         axios.get(config.public.API_URL + 'voucher', {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             },
             params
         }).then(response => {
@@ -141,7 +141,7 @@
         let formData = JSON.stringify(params)
         axios.post(config.public.API_URL + 'voucherused', formData, {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             },
         }).then(response => {
             if (response.data.success) {

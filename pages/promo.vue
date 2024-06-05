@@ -63,7 +63,7 @@
 
         axios.get(config.public.API_URL + 'promo', {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {

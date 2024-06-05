@@ -14,12 +14,8 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/x-icon',
-          href: '/assets/logo.jpg'
-        },
-        {
-          rel: 'stylesheet',
-          href: 'https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css'
-        },
+          href: 'assets/logo.jpg'
+        },        
         {
           rel: 'stylesheet',
           href: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css'
@@ -27,10 +23,7 @@ export default defineNuxtConfig({
       ],
       script: [{
           src: "https://code.jquery.com/jquery-3.6.0.min.js",
-        },
-        {
-          src: 'https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js'
-        }
+        },       
       ],
     },
   },

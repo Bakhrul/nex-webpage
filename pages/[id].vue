@@ -544,7 +544,7 @@
         pageStatus.value = 'home-load'
         axios.get(config.public.API_URL + 'homeregular', {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {
@@ -583,7 +583,7 @@
         pageStatus.value = 'home-load'
         axios.get(config.public.API_URL + 'homeautodebet', {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {
@@ -635,7 +635,7 @@
 
         axios.get(config.public.API_URL + 'paketregular?smcid=' + smc.value, {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {
@@ -784,7 +784,7 @@
         validSMC.value = 'loading';
         axios.get(config.public.API_URL + 'paketautodebet?smcid=' + smc.value + '&hpno=' + phone.value, {
             headers: {
-                'NEX-APIKEY': 'apikey-1234567890'
+                'NEX-APIKEY': config.public.API_KEY
             }
         }).then(response => {
             if (response.data.success) {
@@ -1030,7 +1030,7 @@
 
             axios.get(config.public.API_URL + 'termautodebet', {
                 headers: {
-                    'NEX-APIKEY': 'apikey-1234567890'
+                    'NEX-APIKEY': config.public.API_KEY
                 }
             }).then(response => {
                 if (response.data.success) {
