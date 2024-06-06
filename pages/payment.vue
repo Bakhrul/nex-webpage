@@ -58,7 +58,7 @@
                                     <div style="width:70px">
                                         <img :src="a.iconurl" style="max-width:50px;width:auto;">
                                     </div>
-                                    <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentid}}</div>
+                                    <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}</div>
                                 </div>
                                 <div>
                                     <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
@@ -217,7 +217,7 @@
                 urlX = 'paymentregular/shopeepayment'
             } else if (payment.value == 'CARD') {
                 urlX = 'paymentregular/ccpayment'
-            } else if (['PERMATA', 'MANDIRI', 'BNI', 'BRI', 'BCA'].includes(payment.value)) {
+            } else if (['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(payment.value)) {
                 urlX = 'paymentregular/vapayment'
             } else {
                 return false;
@@ -274,7 +274,7 @@
                         location.replace(response.data.data.paymenturl)
                     } else if (payment.value == 'CARD') {
                         location.replace(response.data.data.paymenturl)
-                    } else if (['PERMATA', 'MANDIRI', 'BNI', 'BRI', 'BCA'].includes(payment.value)) {
+                    } else if (['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(payment.value)) {
                         urlX = 'paymentregular/vapayment'
                         localStorage.setItem('amount', response.data.data.amount)
                         localStorage.setItem('bataswaktu', response.data.data.bataswaktu)
