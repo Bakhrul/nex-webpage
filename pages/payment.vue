@@ -38,7 +38,7 @@
                                         <div style="width:70px">
                                             <img :src="a.iconurl" style="max-width:50px;width:auto;">
                                         </div>
-                                        <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentid}}
+                                        <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}
                                         </div>
                                     </div>
                                     <div>
