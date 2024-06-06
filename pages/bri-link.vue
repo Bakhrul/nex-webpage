@@ -147,6 +147,7 @@
                 trxid.value = response.data.data.trxid
                 showModalOtp()
             } else {
+                pageStatus.value = 'standby';
                 $toast.open({
                     message: response.data.message,
                     type: 'error',
@@ -155,6 +156,7 @@
                 });
             }
         }).catch(error => {
+            pageStatus.value = 'standby';
             $toast.open({
                 message: 'Terjadi kesalahan sistem',
                 type: 'error',
@@ -190,6 +192,7 @@
                     })
                 });
             } else {
+                pageStatus.value = 'standby';
                 $toast.open({
                     message: response.data.message,
                     type: 'error',
@@ -198,6 +201,7 @@
                 });
             }
         }).catch(error => {
+            pageStatus.value = 'standby';
             $toast.open({
                 message: 'Terjadi kesalahan sistem',
                 type: 'error',

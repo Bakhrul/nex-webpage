@@ -68,6 +68,7 @@
             if (response.data.success) {
                 location.replace(response.data.data.paymenturl);
             } else {
+                pageStatus.value = 'standby';
                 $toast.open({
                     message: response.data.message,
                     type: 'error',
@@ -76,6 +77,7 @@
                 });
             }
         }).catch(error => {
+            pageStatus.value = 'standby';
             $toast.open({
                 message: 'Terjadi kesalahan sistem',
                 type: 'error',

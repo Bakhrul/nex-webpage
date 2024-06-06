@@ -154,6 +154,7 @@
                     path: route.query.refcode ? '/' + route.query.refcode : '/', 
                 })
             } else {
+                pageStatus.value = 'standby';
                 $toast.open({
                     message: response.data.message,
                     type: 'error',
@@ -162,6 +163,7 @@
                 });
             }
         }).catch(error => {
+            pageStatus.value = 'standby';
             $toast.open({
                 message: 'Terjadi kesalahan sistem',
                 type: 'error',
