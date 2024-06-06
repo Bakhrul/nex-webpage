@@ -35,7 +35,7 @@
                                 <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
                                     v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
                                     <div class="flex items-center">
-                                        <div style="width:70px">
+                                        <div style="max-width:80px">
                                             <img :src="a.iconurl" style="max-width:50px;width:auto;">
                                         </div>
                                         <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}
@@ -55,7 +55,7 @@
                             <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
                                 v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
                                 <div class="flex items-center">
-                                    <div style="width:70px">
+                                    <div style="max-width:80px">
                                         <img :src="a.iconurl" style="max-height:40px">
                                     </div>
                                     <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}</div>
