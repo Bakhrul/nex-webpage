@@ -56,7 +56,7 @@
                                 v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
                                 <div class="flex items-center">
                                     <div>
-                                        <img :src="a.iconurl" style="max-height:40px">
+                                        <img :src="a.iconurl" :style="['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(a.paymentid) ? 'max-width:90px' : 'max-height:25px'">
                                     </div>
                                     <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}</div>
                                 </div>
