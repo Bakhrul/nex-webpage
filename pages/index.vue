@@ -119,7 +119,7 @@
                             v-if="index <= lastShowIndexPromoRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;">
                             </div>
                             <div class="px-3 py-2">
                                 <div class="justify-between flex items-center mb-1">
@@ -177,7 +177,7 @@
                             v-if="index <= lastShowIndexRegular">
                             <div style="cursor:pointer;" @click="redirectPacket(context.nama, context.pakettype)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-1">
@@ -235,7 +235,7 @@
                         <div class="border border-gray-200 rounded-lg mb-3 shadow-lg" style="min-height:200px">
                             <div style="cursor:pointer;" @click="redirectPacket(context.id)">
                                 <img :src="context.bannerurl" class="w-full rounded-lg"
-                                    style="height:100px;object-fit: cover;object-position:center;">
+                                    style="height:100px;">
                             </div>
                             <div class="p-3">
                                 <div class="justify-between flex items-center mb-1">
