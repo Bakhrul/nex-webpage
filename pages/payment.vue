@@ -200,9 +200,9 @@
             smcid: route.query.smc,
             vouchercode: route.query.voucher,
             paymentid: payment.value,
-            referalcode: route.query.refcode,
+            referalcode: route.query.refcode ? route.query.refcode : '',
             hpno: route.query.phone,
-            refcode: route.query.refcode,
+            refcode: route.query.refcode ? route.query.refcode : '',
             pakettype: route.query.typePacket
         }
         if (type == 'regular') {
