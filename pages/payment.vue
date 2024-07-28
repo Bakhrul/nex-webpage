@@ -203,7 +203,9 @@
             referalcode: route.query.refcode ? route.query.refcode : '',
             hpno: route.query.phone,
             refcode: route.query.refcode ? route.query.refcode : '',
-            pakettype: route.query.typePacket
+            pakettype: route.query.typePacket,
+            paketaddonid: route.query.paketaddonid,
+            paketaddontype: route.query.paketaddontype,
         }
         if (type == 'regular') {
             if (payment.value == 'DANA') {

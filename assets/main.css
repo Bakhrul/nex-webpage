@@ -244,3 +244,11 @@ input[type=number] {
   button:disabled{
     opacity: 0.5;
   }
+
+  .active-addon{
+    background-color: var(--primary) !important; 
+    
+  }
+  .active-addon .text{
+    color: #fff !important;
+  }

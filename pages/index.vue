@@ -44,19 +44,19 @@
                             </slide>
 
                             <template #addons>
-                                
+
                                 <pagination />
                             </template>
                         </carousel>
 
                     </div>
-                </div>                
+                </div>
                 <div class="p-3 border-b border-gray-200">
                     <div class="text-lg font-bold">Paket Langganan</div>
-                            <div class="text-gray-600">Pilih di bawah ini untuk langganan regular atau auto debet</div>
+                    <div class="text-gray-600">Pilih di bawah ini untuk langganan regular atau auto debet</div>
                     <div class="flex items-center">
                         <button type="button"
-                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
+                            @click="type = 'regular';smc = '';phone = '';canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeReguler();autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false;chooseAddon = '';typeAddon = '';priceAddon = 0"
                             :class="type == 'regular' ? 'active' : ''" class="option-type2 mt-3 mr-3">Reguler</button>
                         <!-- <button type="button"
                             @click="type = 'auto';smc = '';phone = '';canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0; disc = 0; voucher = ''; homeAutoDebet(); autoDebet = false;validSMC = '';showRegular = false; showRegularPromo = false; showAutoDebet = false"
@@ -67,7 +67,8 @@
                         <input type="number" @keypress="checkDigit" @input="phone = $event.target.value.toString()"
                             class="w-full p-3 border-gray-300 rounded-xl border" :value="phone"
                             placeholder="Masukan No Handphone Awal 0" />
-                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Mohon input nomor HP yang
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Mohon input
+                            nomor HP yang
                             dapat dihubungi supaya
                             dapat
                             kami
@@ -77,7 +78,7 @@
                         <div class="font-semibold mb-2">No SMC ID</div>
                         <div class="relative w-full">
                             <input type="number" @keypress="checkDigit($event)" maxlength="16"
-                                @input="canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0, 16); autoDebet = false; validSMC = false; showRegular = false; showRegularPromo = false; showAutoDebet = false; checkSMCID()"
+                                @input="canChoosePacket = false;typePacket = '';choosePacket = '';pricePacket = 0;disc = 0; voucher = ''; smc = $event.target.value.toString().slice(0, 16); autoDebet = false; validSMC = false; showRegular = false; showRegularPromo = false; showAutoDebet = false; checkSMCID();chooseAddon = '';typeAddon = '';priceAddon = 0"
                                 class="w-full p-3 border-gray-300 rounded-xl border" :value="smc"
                                 placeholder="Masukan No SMC ID" />
                             <div v-if="validSMC == 'yes'"
@@ -95,9 +96,10 @@
                                 <div class="loader-small"></div>
                             </div>
                         </div>
-                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan nomor SMC ID di atas
+                        <div class="text-gray-600 pt-1" style="font-style:italic;font-size:11px !important">Masukan
+                            nomor SMC ID di atas
                             jika ingin memilih paket langganan<br> di bawah ini</div>
-                    </div>                  
+                    </div>
                 </div>
                 <div v-if="pageStatus == 'home-load'" class="flex justify-center mt-5">
                     <div class="loader"></div>
@@ -144,7 +146,7 @@
                                 <div class="flex items-center flex-wrap">
                                     <button type="button" class="option-type mt-1 mr-3" v-for="child in context.paket"
                                         :class="`${!canChoosePacket ? 'disabled' : ''} ${choosePacket == child.paketid && typePacket == child.pakettype ? 'active' : ''}`"
-                                        @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>                                      
+                                        @click="changeChooseRegular(child.paketid, child.harga, child.harganormal, child.pakettype, true, index)">{{child.masaaktif}}</button>
                                 </div>
                             </div>
                         </div>
@@ -265,6 +267,31 @@
                         </div>
                     </template>
                 </div>
+                <div class="p-3 border-b border-gray-200 relative" v-if="listPacketAddOn.length > 0">
+                    <div class="flex justify-between items-center mb-3">
+                        <div>
+                            <div class="text-lg font-bold">{{ titleAddon }}</div>
+                            <div class="text-gray-600">{{ subTitleAddon }}</div>
+                        </div>
+                    </div>
+                    <div class="shadow-lg w-full border-b p-3 border-gray-200 rounded mb-3" :class="priceAddon == context.harga && typeAddon == context.pakettype && chooseAddon == context.paketid ? 'active-addon' : ''"
+                        v-for="context in listPacketAddOn" @click=" priceAddon = context.harga;typeAddon = context.pakettype;chooseAddon = context.paketid">
+                        <div class="flex justify-content-between">
+                            <div style="width:60%">
+                                <div class="font-bold text-lg text">{{context.namapaket}}</div>
+                                <div class="text-gray-600 text pt-1 text-sm font-semibold">{{context.pricenote}}
+                                </div>
+                                <div class="text-gray-600 text pt-1 text-xs">{{ context.masaaktif }}</div>
+                                <div class="text-gray-600 text pt-1 text-xs">{{ context.masaaktifnote }}</div>
+                            </div>
+                            <div style="width:40%" class="text-right">
+                                <div class="text-xs line-through text">{{ context.harganormal }}</div>
+                                <div class="text-base font-bold text pt-1 text-red-500">{{context.harga}}</div>
+                                <div class="text-gray-600 text-xs text pt-1">{{context.paketnote}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="p-3 border-b border-gray-200" v-if="type == 'auto'">
                     <div class="flex items-center">
                         <div class="checkbox-auto pointer mr-3 rounded-lg" :class="autoDebet ? 'active' : ''"
@@ -274,33 +301,21 @@
                         <div class="text-black font-medium text-sm">Saya Setuju Auto Debet</div>
                     </div>
                 </div>
-                <div class="p-3 border-b border-gray-200" v-if="type == 'regular'" id="section-voucher">
+                <div class="p-3 border-b border-gray-200"
+                    style="border:1px #00529b solid !important;border-right:0 !important;border-left:0 !important;background:#cdddf6;"
+                    v-if="type == 'regular'" id="section-voucher">
 
                     <div class="flex items-center justify-between" style="cursor:pointer;"
                         @click="redirectInputPromo()">
                         <div class="flex items-center">
                             <img src="~/assets/icon-discount.png" style="width:30px" />
-                            <div class="pl-3 text-sm" :class="voucher ? 'text-black' : 'text-black'">
+                            <div class="pl-3 text-sm font-bold" :class="voucher ? 'text-black' : 'text-black'">
                                 {{ voucher ? '1 Voucher digunakan' : 'Makin hemat pakai promo' }}</div>
                         </div>
                         <div class="" v-if="voucher" @click.stop="voucher = ''; disc = 0"><i
                                 class="bi bi-x-circle text-2xl" style="color:red;"></i></div>
                         <div class="flex items-center" v-if="!voucher">
-                            <svg width="30px" height="30px" viewBox="-3 0 32 32" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <g id="icomoon-ignore">
-                                </g>
-                                <path
-                                    d="M13.11 29.113c7.243 0 13.113-5.871 13.113-13.113s-5.87-13.113-13.113-13.113c-7.242 0-13.113 5.871-13.113 13.113s5.871 13.113 13.113 13.113zM13.11 3.936c6.652 0 12.064 5.412 12.064 12.064s-5.412 12.064-12.064 12.064c-6.653 0-12.064-5.412-12.064-12.064s5.411-12.064 12.064-12.064z"
-                                    fill="#000000">
-
-                                </path>
-                                <path
-                                    d="M13.906 21.637l0.742 0.742 6.378-6.379-6.378-6.379-0.742 0.742 5.112 5.112h-12.727v1.049h12.727z"
-                                    fill="#000000">
-
-                                </path>
-                            </svg>
+                            <i class="bi bi-chevron-right text-2xl" style="color:black;"></i>
                         </div>
 
 
@@ -309,7 +324,7 @@
                 <div class="p-3 border-b border-gray-200" v-if="type == 'regular'">
                     <div class="flex justify-between text-base mt-2 mb-2 text-sm">
                         <div class="text-gray-600">Sub Total</div>
-                        <div class="text-right text-gray-600">Rp {{ rupiahFormat(stringToNumber(pricePacket)) }}</div>
+                        <div class="text-right text-gray-600">Rp {{ rupiahFormat(stringToNumber(pricePacket) + stringToNumber(priceAddon)) }}</div>
                     </div>
                     <div class="flex justify-between text-base mt-2 mb-5 text-sm">
                         <div class="text-gray-600">Promo</div>
@@ -317,7 +332,7 @@
                     </div>
                     <div class="flex justify-between text-base mt-2 mb-2">
                         <div class="font-bold">Total Pembelian</div>
-                        <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket - disc)) }}
+                        <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket) + stringToNumber(priceAddon) - stringToNumber(disc)) }}
                         </div>
                     </div>
                     <button type="button" :disabled="!choosePacket" @click="redirectPayment()"
@@ -345,7 +360,7 @@
 </template>
 <script setup>
     import axios from "axios";
-    
+
 
     import {
         useToast
@@ -404,6 +419,15 @@
 
     const lastShowIndexAutoDebet = ref(-1);
     const showLoadMoreAutoDebet = ref(false);
+
+    const listPacketAddOn = ref([]);
+
+    const priceAddon = ref(0);
+    const typeAddon = ref('');
+    const chooseAddon = ref('');
+
+    const titleAddon = ref('Add On Paket');
+    const subTitleAddon = ref('Kamu berhak untuk membeli paket dibawah ini')
 
     useSeoMeta({
         title: 'Nex Web Page',
@@ -517,6 +541,11 @@
         pricePacket.value = 0;
         canChoosePacket.value = false;
 
+
+        priceAddon.value = 0
+        typeAddon.value = ''
+        chooseAddon.value = ''
+
         autoDebet.value = false;
 
         lastShowIndexPromoRegular.value = -1;
@@ -555,7 +584,7 @@
                 subTitlePromo.value = response.data.data.paketpromosubtitle;
                 if (smc.value && type.value == 'regular') {
                     getPacketRegular()
-                }             
+                }
 
             } else {
                 $toast.open({
@@ -588,7 +617,7 @@
                 banner.value = response.data.data.banner;
 
                 title.value = response.data.data.pakettitle;
-                subTitle.value = response.data.data.paketsubtitle;               
+                subTitle.value = response.data.data.paketsubtitle;
 
                 if (smc.value && type.value == 'auto') {
                     getPacketAutoDebet()
@@ -612,7 +641,7 @@
             });
         });
     }
-    
+
 
     function getPacketRegular() {
 
@@ -647,20 +676,21 @@
                         packetRegular.value[i].price = packetRegular.value[i].paket[0].harga
                         packetRegular.value[i].promo = packetRegular.value[i].paket[0].harganormal
                     }
-      
+
                     if (sessionStorage.getItem('packet') && sessionStorage.getItem('typePacket')) {
-                        let check = packetRegular.value[i].paket.findIndex((e) => e.paketid == sessionStorage.getItem('packet') && e.pakettype == sessionStorage.getItem('typePacket'))                    
-                        if (check >= 0) {                            
+                        let check = packetRegular.value[i].paket.findIndex((e) => e.paketid == sessionStorage
+                            .getItem('packet') && e.pakettype == sessionStorage.getItem('typePacket'))
+                        if (check >= 0) {
                             packetRegular.value[i].pakettype = packetRegular.value[i].paket[check].pakettype
                             packetRegular.value[i].price = packetRegular.value[i].paket[check].harga
                             packetRegular.value[i].promo = packetRegular.value[i].paket[check].harganormal
 
                             choosePacket.value = sessionStorage.getItem('packet');
                             pricePacket.value = packetRegular.value[i].paket[check].harga;
-                            
-                            typePacket.value = sessionStorage.getItem('typePacket');                        
 
-                            hasSelectedPacket = true;                         
+                            typePacket.value = sessionStorage.getItem('typePacket');
+
+                            hasSelectedPacket = true;
 
                         }
                     }
@@ -674,7 +704,9 @@
                     }
 
                     if (sessionStorage.getItem('packet')) {
-                        let check = packetPromoRegular.value[i].paket.findIndex((e) => e.paketid == sessionStorage.getItem('packet') && e.pakettype == sessionStorage.getItem('typePacket'))
+                        let check = packetPromoRegular.value[i].paket.findIndex((e) => e.paketid ==
+                            sessionStorage.getItem('packet') && e.pakettype == sessionStorage.getItem(
+                                'typePacket'))
                         if (check >= 0) {
                             packetPromoRegular.value[i].pakettype = packetPromoRegular.value[i].paket[check]
                                 .pakettype
@@ -684,11 +716,11 @@
                                 .harganormal
 
                             choosePacket.value = sessionStorage.getItem('packet');
-                            typePacket.value = sessionStorage.getItem('typePacket');  
+                            typePacket.value = sessionStorage.getItem('typePacket');
 
                             pricePacket.value = packetPromoRegular.value[i].paket[check].harga;
 
-                            hasSelectedPacket = true;                          
+                            hasSelectedPacket = true;
 
                         }
                     }
@@ -732,10 +764,11 @@
                 setTimeout(() => {
                     sessionStorage.removeItem('packet');
                     sessionStorage.removeItem('typePacket')
-                }, 500);                
+                }, 500);
 
                 if (hasSelectedPacket) {
                     viewMoreRegular()
+                    getPacketAddon()
                 }
                 canChoosePacket.value = true;
 
@@ -763,6 +796,55 @@
             });
 
             validSMC.value = 'no';
+        });
+    }
+
+    function getPacketAddon() {
+        listPacketAddOn.value = [];
+        priceAddon.value = 0
+        typeAddon.value = ''
+        chooseAddon.value = ''
+        axios.get(config.public.API_URL + 'paketaddon', {
+            headers: {
+                'NEX-APIKEY': config.public.API_KEY
+            },
+            params: {
+                paketid: choosePacket.value,
+                pakettype: typePacket.value,
+                smcid: smc.value
+            }
+        }).then(response => {
+            if (response.data.success) {
+                listPacketAddOn.value = response.data.data.paketaddon
+
+                let selectedId = sessionStorage.getItem('addon');
+                let selectedType = sessionStorage.getItem('typeAddon');
+                const selectedAddon = listPacketAddOn.value.findIndex((e) => e.paketid == selectedId && e.pakettype == selectedType);
+                if(selectedAddon >= 0){
+                    chooseAddon.value = listPacketAddOn.value[selectedAddon].paketid
+                    typeAddon.value = listPacketAddOn.value[selectedAddon].pakettype
+                    priceAddon.value = listPacketAddOn.value[selectedAddon].harga
+                }
+
+                sessionStorage.removeItem('addon');
+                sessionStorage.removeItem('typeAddon');
+            } else {
+                $toast.open({
+                    message: response.data.message,
+                    type: 'error',
+                    position: 'top',
+                    duration: 2000
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+            $toast.open({
+                message: 'Terjadi kesalahan sistem',
+                type: 'error',
+                position: 'top',
+                duration: 2000
+
+            });
         });
     }
 
@@ -801,7 +883,7 @@
                         }
 
                         hasSelectedPacket = true;
-                       
+
 
                     }
 
@@ -824,12 +906,13 @@
 
                 if (hasSelectedPacket) {
                     viewMoreAutoDebet()
+                    getPacketAddon()
                 }
 
                 setTimeout(() => {
                     sessionStorage.removeItem('packet');
                     sessionStorage.removeItem('typePacket')
-                }, 500);                
+                }, 500);
                 canChoosePacket.value = true;
                 showAutoDebet.value = true;
                 validSMC.value = 'yes';
@@ -856,7 +939,7 @@
         });
     }
 
-    function redirectPacket(id, paketType) {        
+    function redirectPacket(id, paketType) {
         if (!canChoosePacket.value) {
             return false;
         }
@@ -880,9 +963,17 @@
         if (disc.value) {
             sessionStorage.setItem('disc', disc.value);
         }
-        
-        if(typePacket.value){         
+
+        if (typePacket.value) {
             sessionStorage.setItem('typePacket', typePacket.value);
+        }
+
+        if (chooseAddon.value) {
+            sessionStorage.setItem('addon', chooseAddon.value);
+        }
+
+        if (typeAddon.value) {
+            sessionStorage.setItem('typeAddon', typeAddon.value);
         }
 
         sessionStorage.setItem('type', type.value);
@@ -917,11 +1008,19 @@
             sessionStorage.setItem('disc', disc.value);
         }
 
-        if(typePacket.value){
+        if (typePacket.value) {
             sessionStorage.setItem('typePacket', typePacket.value);
         }
 
         sessionStorage.setItem('type', type.value);
+
+        if (chooseAddon.value) {
+            sessionStorage.setItem('addon', chooseAddon.value);
+        }
+
+        if (typeAddon.value) {
+            sessionStorage.setItem('typeAddon', typeAddon.value);
+        }
 
         router.push({
             path: '/promo',
@@ -949,12 +1048,19 @@
             sessionStorage.setItem('disc', disc.value);
         }
 
-        if(typePacket.value){
+        if (typePacket.value) {
             sessionStorage.setItem('typePacket', typePacket.value);
         }
 
         sessionStorage.setItem('type', type.value);
 
+        if (chooseAddon.value) {
+            sessionStorage.setItem('addon', chooseAddon.value);
+        }
+
+        if (typeAddon.value) {
+            sessionStorage.setItem('typeAddon', typeAddon.value);
+        }
         router.push({
             path: '/promo-detail',
             query: {
@@ -974,6 +1080,8 @@
                 type: type.value,
                 voucher: voucher.value,
                 typePacket: typePacket.value,
+                paketaddonid: chooseAddon.value ? chooseAddon.value : '0',
+                paketaddontype: typeAddon.value ? typeAddon.value : '0',
                 refcode: ''
             }
         })
@@ -987,9 +1095,11 @@
 
         }
 
+        getPacketAddon()
+
     }
 
-    function changeChooseRegular(id, price, promo, type, packetPromo = false, indexPacket) {  
+    function changeChooseRegular(id, price, promo, type, packetPromo = false, indexPacket) {
         if (canChoosePacket.value) {
             choosePacket.value = id;
 
@@ -1004,12 +1114,14 @@
             packetPromoRegular.value[indexPacket].pakettype = type;
             packetPromoRegular.value[indexPacket].price = price;
             packetPromoRegular.value[indexPacket].promo = promo;
-            
+
         } else {
             packetRegular.value[indexPacket].pakettype = type;
             packetRegular.value[indexPacket].price = price;
             packetRegular.value[indexPacket].promo = promo;
         }
+
+        getPacketAddon()
 
     }
 
@@ -1083,10 +1195,17 @@
             sessionStorage.setItem('disc', disc.value);
         }
 
-        if(typePacket.value){
+        if (typePacket.value) {
             sessionStorage.setItem('typePacket', typePacket.value);
         }
 
+        if (chooseAddon.value) {
+            sessionStorage.setItem('addon', chooseAddon.value);
+        }
+
+        if (typeAddon.value) {
+            sessionStorage.setItem('typeAddon', typeAddon.value);
+        }
         sessionStorage.setItem('type', type.value);
         if (voucher.value) {
             router.push({
