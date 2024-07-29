@@ -274,20 +274,22 @@
                             <div class="text-gray-600">{{ subTitleAddon }}</div>
                         </div>
                     </div>
-                    <div class="shadow-lg w-full border-b p-3 border-gray-200 rounded mb-3" :class="priceAddon == context.harga && typeAddon == context.pakettype && chooseAddon == context.paketid ? 'active-addon' : ''"
-                        v-for="context in listPacketAddOn" @click=" priceAddon = context.harga;typeAddon = context.pakettype;chooseAddon = context.paketid">
+                    <div class="shadow-lg w-full border-b p-3 border-gray-200 rounded mb-3"
+                        :class="priceAddon == context.harga && typeAddon == context.pakettype && chooseAddon == context.paketid ? 'active-addon' : ''"
+                        v-for="context in listPacketAddOn" @click="selectedAddon(context)">
                         <div class="flex justify-content-between">
                             <div style="width:60%">
                                 <div class="font-bold text-lg text">{{context.namapaket}}</div>
-                                <div class="text-gray-600 text pt-1 text-sm font-semibold">{{context.pricenote}}
+                                <div class="text-gray-600 text pt-1 text-sm font-semibold">{{context.paketnote}}
                                 </div>
                                 <div class="text-gray-600 text pt-1 text-xs">{{ context.masaaktif }}</div>
                                 <div class="text-gray-600 text pt-1 text-xs">{{ context.masaaktifnote }}</div>
                             </div>
                             <div style="width:40%" class="text-right">
-                                <div class="text-xs line-through text">{{ context.harganormal }}</div>
-                                <div class="text-base font-bold text pt-1 text-red-500">{{context.harga}}</div>
-                                <div class="text-gray-600 text-xs text pt-1">{{context.paketnote}}</div>
+                                <div class="text-xs line-through text" v-if="context.harganormal">
+                                    {{ context.harganormal }}</div>
+                                <div class="text-base font-bold text pt-1 text-red-500">Rp {{context.harga}}</div>
+                                <div class="text-gray-600 text-xs text pt-1">{{context.pricenote}}</div>
                             </div>
                         </div>
                     </div>
@@ -324,7 +326,8 @@
                 <div class="p-3 border-b border-gray-200" v-if="type == 'regular'">
                     <div class="flex justify-between text-base mt-2 mb-2 text-sm">
                         <div class="text-gray-600">Sub Total</div>
-                        <div class="text-right text-gray-600">Rp {{ rupiahFormat(stringToNumber(pricePacket) + stringToNumber(priceAddon)) }}</div>
+                        <div class="text-right text-gray-600">Rp
+                            {{ rupiahFormat(stringToNumber(pricePacket) + stringToNumber(priceAddon)) }}</div>
                     </div>
                     <div class="flex justify-between text-base mt-2 mb-5 text-sm">
                         <div class="text-gray-600">Promo</div>
@@ -332,7 +335,8 @@
                     </div>
                     <div class="flex justify-between text-base mt-2 mb-2">
                         <div class="font-bold">Total Pembelian</div>
-                        <div class="text-right font-bold">Rp {{ rupiahFormat(stringToNumber(pricePacket) + stringToNumber(priceAddon) - stringToNumber(disc)) }}
+                        <div class="text-right font-bold">Rp
+                            {{ rupiahFormat(stringToNumber(pricePacket) + stringToNumber(priceAddon) - stringToNumber(disc)) }}
                         </div>
                     </div>
                     <button type="button" :disabled="!choosePacket" @click="redirectPayment()"
@@ -819,8 +823,9 @@
 
                 let selectedId = sessionStorage.getItem('addon');
                 let selectedType = sessionStorage.getItem('typeAddon');
-                const selectedAddon = listPacketAddOn.value.findIndex((e) => e.paketid == selectedId && e.pakettype == selectedType);
-                if(selectedAddon >= 0){
+                const selectedAddon = listPacketAddOn.value.findIndex((e) => e.paketid == selectedId && e
+                    .pakettype == selectedType);
+                if (selectedAddon >= 0) {
                     chooseAddon.value = listPacketAddOn.value[selectedAddon].paketid
                     typeAddon.value = listPacketAddOn.value[selectedAddon].pakettype
                     priceAddon.value = listPacketAddOn.value[selectedAddon].harga
@@ -1082,7 +1087,7 @@
                 typePacket: typePacket.value,
                 paketaddonid: chooseAddon.value ? chooseAddon.value : '0',
                 paketaddontype: typeAddon.value ? typeAddon.value : '0',
-                refcode: route.params.id
+                refcode: router.params.id
             }
         })
     }
@@ -1293,6 +1298,19 @@
                 return true;
             }
         }
+    }
+
+    function selectedAddon(context) {
+        if (typeAddon.value == context.pakettype && chooseAddon.value == context.paketid) {
+            priceAddon.value = 0;
+            typeAddon.value = ''
+            chooseAddon.value = ''
+        } else {
+            priceAddon.value = context.harga;
+            typeAddon.value = context.pakettype;
+            chooseAddon.value = context.paketid
+        }
+
     }
 
     const checkDigit = (event) => {
