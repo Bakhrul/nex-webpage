@@ -215,6 +215,8 @@
                 urlX = 'paymentregular/ovopayment'
             } else if (payment.value == 'LINKAJA') {
                 urlX = 'paymentregular/linkajapayment'
+            } else if (payment.value == 'GOPAY') {
+                urlX = 'paymentregular/gopaypayment'
             } else if (payment.value == 'SHOPEEPAY') {
                 urlX = 'paymentregular/shopeepayment'
             } else if (payment.value == 'CARD') {
@@ -271,6 +273,8 @@
                         });
 
                     } else if (payment.value == 'LINKAJA') {
+                        location.replace(response.data.data.paymenturl)
+                    } else if (payment.value == 'GOPAY') {
                         location.replace(response.data.data.paymenturl)
                     } else if (payment.value == 'SHOPEEPAY') {
                         location.replace(response.data.data.paymenturl)
