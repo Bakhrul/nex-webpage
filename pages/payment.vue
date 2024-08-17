@@ -34,9 +34,13 @@
                             </div>
                             <div class="text-center font-bold text-2xl pt-3 c-primary">{{ totalQris }}</div>
                             <div class="flex justify-center mt-5">
-                                <vue-qrcode :width="230" :value="qris" />
+                                <vue-qrcode :id="'qr-image-payment'" :width="230" download="true" :value="qris" />
                             </div>
-                            <div class="text-center font-bold mt-1">Scan QRIS untuk pembayaran</div>
+                            <div class="flex justify-center mt-1">
+                                <button type="button" class="bg bg-gray-300 px-3 py-2 font-bold rounded"
+                                    @click="downloadImageQr(qris)">Download QRIS</button>
+                            </div>
+                            <div class="text-center font-bold mt-5">Scan QRIS untuk pembayaran</div>
                             <button type="button" @click=" router.replace({
             path: '/'
         })" class="text-white mb-5 mt-10 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Selesai</button>
@@ -379,5 +383,13 @@
     function offModalOvo() {
         document.getElementById("overlay").style.display = "none";
         document.getElementById('modal-term-dialog').style.display = "none";
+    }
+    async function downloadImageQr(imageSrc) {
+        console.log(imageSrc)
+        const linkSource = document.getElementById("qr-image-payment").src;
+        const downloadLink = document.createElement("a");
+        downloadLink.href = linkSource;
+        downloadLink.download = 'qris.png';
+        downloadLink.click();
     }
 </script>
