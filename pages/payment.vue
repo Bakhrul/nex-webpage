@@ -28,49 +28,72 @@
                         <div class="loader"></div>
                     </div>
                     <template v-else>
-                        <div class="p-3 text-xl font-bold">Pilih Pembayaran</div>
-                        <template v-for="context in listPaymentAutoDebet">
-                            <div class="p-3" :style="index != listPaymentRegular.length - 1 ? 'border-bottom:3px #ddd solid' : ''">
-                                <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
-                                <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
-                                    v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
-                                    <div class="flex items-center">
+                        <div class="p-5" v-if="pageStatus == 'qris'">
+                            <div class="flex justify-center mt-3">
+                                <img src="~/assets/qris.png" style="width:100px" />
+                            </div>
+                            <div class="text-center font-bold text-2xl pt-3 c-primary">{{ totalQris }}</div>
+                            <div class="flex justify-center mt-5">
+                                <vue-qrcode :width="230" :value="qris" />
+                            </div>
+                            <div class="text-center font-bold mt-1">Scan QRIS untuk pembayaran</div>
+                            <button type="button" @click=" router.replace({
+            path: '/'
+        })" class="text-white mb-5 mt-10 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">Selesai</button>
+                        </div>
+                        <template v-else>
+                            <div class="p-3 text-xl font-bold">Pilih Pembayaran</div>
+                            <template v-for="context in listPaymentAutoDebet">
+                                <div class="p-3"
+                                    :style="index != listPaymentRegular.length - 1 ? 'border-bottom:3px #ddd solid' : ''">
+                                    <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
+                                    <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
+                                        v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid"
+                                        :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <img :src="a.iconurl" style="max-height:40px">
+                                            </div>
+                                            <div class="font-semibold text-sm" style="padding-left: 10px;">
+                                                {{a.paymentname}}
+                                            </div>
+                                        </div>
                                         <div>
-                                            <img :src="a.iconurl" style="max-height:40px">
-                                        </div>
-                                        <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
-                                            <div class="circle"></div>
+                                            <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
+                                                <div class="circle"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
+                            <template v-for="(context, index) in listPaymentRegular">
+                                <div class="p-3"
+                                    :style="index != listPaymentRegular.length - 1 ? 'border-bottom:3px #ddd solid' : ''">
+                                    <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
+                                    <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
+                                        v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid"
+                                        :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
+                                        <div class="flex items-center">
+                                            <div>
+                                                <img :src="a.iconurl"
+                                                    :style="['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(a.paymentid) ? 'max-width:90px' : 'max-height:25px'">
+                                            </div>
+                                            <div class="font-semibold text-sm" style="padding-left: 10px;">
+                                                {{a.paymentname}}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
+                                                <div class="circle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <button type="button" @click="confirmProcessPayment()"
+                                :disabled="!payment || pageStatus == 'payment-load'"
+                                class="text-white mb-5 mt-10 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">{{ pageStatus == 'payment-load' ? 'Processing...' : 'Bayar' }}</button>
                         </template>
-                        <template v-for="(context, index) in listPaymentRegular">
-                            <div class="p-3" :style="index != listPaymentRegular.length - 1 ? 'border-bottom:3px #ddd solid' : ''">
-                            <div class="text-base font-bold mt-5 mb-2">{{context.paymentname}}</div>
-                            <div class="flex justify-between items-center mt-5 border-b border-gray-200 pb-5 pointer"
-                                v-for="(a, idx) in context.paymentdet" @click="payment = a.paymentid" :style="idx == context.paymentdet.length - 1 ? 'border-bottom:0 !important;' : ''">
-                                <div class="flex items-center">
-                                    <div>
-                                        <img :src="a.iconurl" :style="['VC001', 'VC002', 'VC003', 'VC004', 'VC005'].includes(a.paymentid) ? 'max-width:90px' : 'max-height:25px'">
-                                    </div>
-                                    <div class="font-semibold text-sm" style="padding-left: 10px;">{{a.paymentname}}</div>
-                                </div>
-                                <div>
-                                    <div class="radio-payment" :class="payment == a.paymentid ? 'active' : ''">
-                                        <div class="circle"></div>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </template>
-                        <button type="button" @click="confirmProcessPayment()"
-                            :disabled="!payment || pageStatus == 'payment-load'"
-                            class="text-white mb-5 mt-10 font-bold text-base rounded-lg mt-3 bg-primary w-full p-3">{{ pageStatus == 'payment-load' ? 'Processing...' : 'Bayar' }}</button>
                     </template>
                 </div>
             </div>
@@ -79,7 +102,7 @@
 </template>
 <script setup lang="ts">
     import axios from "axios";
-
+    import VueQrcode from 'vue-qrcode'
     import Swal from 'sweetalert2'
     import {
         useToast
@@ -97,6 +120,9 @@
 
     const payment = ref('');
     const ovoPhone = ref('');
+
+    const totalQris = ref('');
+    const qris = ref('');
     const listPaymentAutoDebet = ref([])
     const listPaymentRegular = ref([])
 
@@ -213,6 +239,9 @@
             } else if (payment.value == 'OVO') {
                 data.hpno = ovoPhone.value;
                 urlX = 'paymentregular/ovopayment'
+            } else if (payment.value == 'QRIS') {
+                data.hpno = ovoPhone.value;
+                urlX = 'paymentregular/qrispayment'
             } else if (payment.value == 'LINKAJA') {
                 urlX = 'paymentregular/linkajapayment'
             } else if (payment.value == 'GOPAY') {
@@ -234,6 +263,18 @@
                 urlX = 'paymentautodebet/ovolink'
             } else if (payment.value == 'SHOPPEE') {
                 urlX = 'paymentautodebet/shopeelink'
+            } else if (payment.value == 'QRIS') {
+                router.push({
+                    path: '/bri-link',
+                    query: {
+                        smc: route.query.smc,
+                        phone: route.query.phone,
+                        refcode: route.query.refcode,
+                        packet: route.query.packet,
+                        voucher: route.query.voucher,
+                    }
+                })
+                return false;
             } else if (payment.value == 'BRI') {
                 router.push({
                     path: '/bri-link',
@@ -272,6 +313,10 @@
                             router.back()
                         });
 
+                    } else if (payment.value == 'QRIS') {
+                        pageStatus.value = 'qris';
+                        totalQris.value = response.data.data.amount;
+                        qris.value = response.data.data.qrstring;
                     } else if (payment.value == 'LINKAJA') {
                         location.replace(response.data.data.paymenturl)
                     } else if (payment.value == 'GOPAY') {
