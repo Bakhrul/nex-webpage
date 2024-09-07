@@ -1087,7 +1087,7 @@
                 typePacket: typePacket.value,
                 paketaddonid: chooseAddon.value ? chooseAddon.value : '0',
                 paketaddontype: typeAddon.value ? typeAddon.value : '0',
-                refcode: router.params.id
+                refcode: route.params.id
             }
         })
     }
